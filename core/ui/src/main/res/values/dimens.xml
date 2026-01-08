@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="spacing_x2">2dp</dimen>
+    <dimen name="spacing_x4">4dp</dimen>
+    <dimen name="spacing_x8">8dp</dimen>
+    <dimen name="spacing_x12">12dp</dimen>
+    <dimen name="spacing_x16">16dp</dimen>
+    <dimen name="spacing_x20">20dp</dimen>
+    <dimen name="spacing_x24">24dp</dimen>
+    <dimen name="spacing_x32">32dp</dimen>
+    <dimen name="spacing_x40">40dp</dimen>
+    <dimen name="spacing_x64">64dp</dimen>
+    <dimen name="minus_spacing_x8">-8dp</dimen>
+    <dimen name="minus_spacing_x12">-12dp</dimen>
+
+    <dimen name="btn_corner_radius">@dimen/spacing_x2</dimen>
+    <dimen name="btn_pill_corner_radius">@dimen/spacing_x64</dimen>
+    <dimen name="tag_corner_radius">@dimen/spacing_x64</dimen>
+
+    <dimen name="shadow_high_x">0dp</dimen>
+    <dimen name="shadow_high_y">0dp</dimen>
+    <dimen name="shadow_high_blur">10dp</dimen>
+
+</resources>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/container"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_gravity="center">
+
+  <com.example.ui.navbar.UiNavBar
+    android:id="@+id/nav_bar"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:ui_title="Splash Activity" />
+
+  <com.example.ui.text.UiTextView
+    android:id="@+id/title_text"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/spacing_x16"
+    android:layout_marginTop="18dp"
+    android:ellipsize="end"
+    android:gravity="center_horizontal"
+    android:maxLines="2"
+    android:text="We need to access your location"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/nav_bar"
+    app:textStyle="title_large_bold_default" />
+
+  <com.example.ui.text.UiTextView
+    android:id="@+id/title_description"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_x16"
+    android:gravity="center_horizontal"
+    android:text="That\'s so you can take orders and display your accurate location to customers."
+    app:layout_constraintEnd_toEndOf="@+id/title_text"
+    app:layout_constraintStart_toStartOf="@+id/title_text"
+    app:layout_constraintTop_toBottomOf="@+id/title_text"
+    app:textStyle="body_moderate_regular_default" />
+
+  <com.example.ui.text.UiTextView
+    android:id="@+id/step_1_description"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:maxLines="3"
+    android:layout_marginTop="@dimen/spacing_x16"
+    android:text="Give access for every time you’re using the app or only for this time."
+    app:layout_constraintEnd_toEndOf="@+id/title_description"
+    app:layout_constraintHorizontal_bias="0"
+    app:layout_constraintStart_toStartOf="@+id/title_description"
+    app:layout_constraintTop_toBottomOf="@+id/title_description"
+    app:textStyle="caption_small_regular_default" />
+
+
+  <com.example.ui.button.UiButton
+    android:id="@+id/btn_later"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginBottom="20dp"
+    android:text="Maybe later"
+    app:btnType="secondary"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toStartOf="@id/btn_update"
+    app:layout_constraintStart_toStartOf="parent" />
+
+  <com.example.ui.button.UiButton
+    android:id="@+id/btn_update"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="20dp"
+    android:text="Update Now"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toEndOf="@id/btn_later"/>
+
+  <include
+    android:id="@+id/shimmerItem1"
+    layout="@layout/sample_shimmer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintStart_toStartOf="@id/step_1_description"
+    app:layout_constraintTop_toBottomOf="@+id/step_1_description"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
