@@ -92,7 +92,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "NutaTest"
 include(":app")
-include(":core:model")
+include(":core:domain")
 include(":core:local")
 include(":core:data")
 include(":core:test")

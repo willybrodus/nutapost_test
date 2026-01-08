@@ -4,8 +4,9 @@ plugins {
   alias(libs.plugins.ksp)
 }
 
+
 android {
-  namespace = "com.nutapos.nutatest.core.data"
+  namespace = "com.nutapos.nutatest.core.domain"
   sourceSets {
     getByName("main") {
       java.srcDirs("src/main/kotlin")
@@ -14,7 +15,13 @@ android {
 }
 
 dependencies {
+  implementation(projects.core.data)
   implementation(projects.core.local)
+  implementation(projects.core.utils)
+
+  implementation(libs.coroutines)
+  implementation(libs.coroutines.test)
+  // Hilt
   testImplementation(projects.core.test)
 
   // coroutines

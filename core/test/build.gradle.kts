@@ -13,7 +13,7 @@ android {
 }
 
 dependencies {
-  implementation(projects.core.model)
+  implementation(projects.core.domain)
   implementation(libs.coroutines)
   implementation(libs.coroutines.test)
   implementation(libs.junit)
