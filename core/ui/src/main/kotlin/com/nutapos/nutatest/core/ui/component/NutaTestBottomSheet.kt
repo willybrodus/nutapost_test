@@ -17,7 +17,6 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -40,7 +39,7 @@ fun NutaTestBottomSheet(
 ) {
     Surface(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     ) {
         Column(
             modifier = Modifier
@@ -59,19 +58,20 @@ fun NutaTestBottomSheet(
                     modifier = Modifier.align(Alignment.Center),
                     style = MaterialTheme.typography.titleMedium
                 )
-                IconButton(
-                    onClick = onDismissRequest,
+                Box(
                     modifier = Modifier
-                        .size(24.dp)
+                        .size(24.dp) // Total size of the circle background
+                        .align(Alignment.CenterEnd)
                         .clip(CircleShape)
                         .background(Fill3)
-                        .align(Alignment.CenterEnd)
+                        .clickable(onClick = onDismissRequest),
+                    contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = "Tutup",
                         tint = Text4,
-                        modifier = Modifier.padding(4.dp)
+                        modifier = Modifier.size(16.dp) // Size of the 'X' icon itself
                     )
                 }
             }
