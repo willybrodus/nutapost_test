@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,17 +41,19 @@ import com.nutapos.nutatest.core.ui.theme.NutaTestTheme
 import com.nutapos.nutatest.feature.cash_in.R
 import com.nutapos.nutatest.feature.cash_in.report.components.CashInListGroup
 import com.nutapos.nutatest.feature.cash_in.report.components.CashInTransaction
-import com.nutapos.nutatest.feature.common_ui.dialog.PeriodSelectionDialog
+import com.nutapos.nutatest.feature.common_ui.bottomsheet.PeriodSelectionDialog
 
 data class CashInGroup(val date: String, val total: String, val transactions: List<CashInTransaction>)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CashInListScreen(
     onNavigateBack: () -> Unit,
     onNavigateToCreate: () -> Unit,
     groups: List<CashInGroup> = emptyList(),
 ) {
-    var showPeriodDialog by remember { mutableStateOf(false) }
+    var showPeriodSheet by remember { mutableStateOf(false) }
+    val periodSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     Scaffold(
         topBar = {
@@ -86,7 +90,7 @@ fun CashInListScreen(
                     )
                     NutaTestCtaButton(
                         text = stringResource(id = R.string.cash_in_set_period),
-                        onClick = { showPeriodDialog = true }
+                        onClick = { showPeriodSheet = true }
                     )
                 }
             }
@@ -103,7 +107,7 @@ fun CashInListScreen(
                         .clip(RoundedCornerShape(12.dp))
                         .border(1.dp, GreenMain, RoundedCornerShape(12.dp))
                         .background(GreenSecondary)
-                        .clickable { showPeriodDialog = true }
+                        .clickable { showPeriodSheet = true }
                         .padding(horizontal = 12.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -139,11 +143,12 @@ fun CashInListScreen(
         }
     }
 
-    if (showPeriodDialog) {
-        PeriodSelectionDialog(
-            onDismiss = { showPeriodDialog = false },
+    if (showPeriodSheet) {
+      PeriodSelectionDialog(
+            //sheetState = periodSheetState,
+            onDismiss = { showPeriodSheet = false },
             onApply = { _, _ ->
-                showPeriodDialog = false
+                showPeriodSheet = false
             }
         )
     }

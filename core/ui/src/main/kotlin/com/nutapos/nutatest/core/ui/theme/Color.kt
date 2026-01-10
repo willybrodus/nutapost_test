@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 val GreenMain = Color(0xFF3DAE2F)
 val GreenSecondary = Color(0xFFF0FBEF)
+val GreenThriddenary = Color(0xFFE6FAD5)
 
 val Text4 = Color(0xFF525867)
 

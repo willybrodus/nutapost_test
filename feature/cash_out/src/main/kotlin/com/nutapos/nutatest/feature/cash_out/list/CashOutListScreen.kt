@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -39,10 +40,11 @@ import com.nutapos.nutatest.core.ui.theme.NutaTestTheme
 import com.nutapos.nutatest.feature.cash_out.R
 import com.nutapos.nutatest.feature.cash_out.list.components.CashOutListGroup
 import com.nutapos.nutatest.feature.cash_out.list.components.CashOutTransaction
-import com.nutapos.nutatest.feature.common_ui.dialog.PeriodSelectionDialog
+import com.nutapos.nutatest.feature.common_ui.bottomsheet.PeriodSelectionDialog
 
 data class CashOutGroup(val date: String, val total: String, val transactions: List<CashOutTransaction>)
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CashOutListScreen(
     onNavigateBack: () -> Unit,
@@ -168,11 +170,11 @@ fun CashOutListScreenEmptyPreview() {
 @Composable
 fun CashOutListScreenWithDataPreview() {
     val dummyTransactions1 = listOf(
-        CashOutTransaction("08:42:56",  "Kasir perangkat ke-49", "Rp 50.000",  "Galon Aqua", "Modal"),
-        CashOutTransaction("08:42:56", "Kasir perangkat ke-49", "Rp 25.000",  "Listrik Token 25k", "Pendapatan")
+        CashOutTransaction("08:42:56", "Kasir perangkat ke-49", "Rp 50.000", "Galon Aqua", "Modal"),
+        CashOutTransaction("08:42:56", "Kasir perangkat ke-49", "Rp 25.000", "Listrik Token 25k", "Pendapatan")
     )
     val dummyTransactions2 = listOf(
-        CashOutTransaction("08:42:56", "Kasir perangkat ke-49", "Rp 15.000",  "Iuran Sampah", "Modal")
+        CashOutTransaction("08:42:56", "Kasir perangkat ke-49", "Rp 15.000", "Iuran Sampah", "Modal")
     )
     val dummyGroups = listOf(
         CashOutGroup("Senin, 22 April 2024", "Rp 75.000", dummyTransactions1),

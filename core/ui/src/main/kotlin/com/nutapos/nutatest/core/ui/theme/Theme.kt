@@ -54,8 +54,8 @@ fun NutaTestTheme(
             val activity = view.context as? Activity
             if (activity != null) {
                 val window = activity.window
-                window.statusBarColor = colorScheme.primary.toArgb()
-                WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+                window.statusBarColor = GreenMain.toArgb()
+                WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
             }
         }
     }
