@@ -17,7 +17,6 @@ android {
     applicationId = "com.nutapos.nutatest"
     versionCode = Configuration.versionCode
     versionName = Configuration.versionName
-
     multiDexEnabled = true
     testInstrumentationRunner = "com.nutapos.nutatest.AppTestRunner"
   }
@@ -66,62 +65,37 @@ android {
 }
 
 dependencies {
-  // modules
-  implementation(projects.core.data)
   implementation(projects.core.ui)
+  implementation(projects.core.domain)
+  implementation(projects.core.data)
+  implementation(projects.core.local)
   implementation(projects.core.utils)
+  implementation(projects.feature.cashIn)
+  implementation(projects.feature.cashOut)
+  implementation(projects.feature.customers)
+  implementation(projects.feature.proof)
+  implementation(projects.feature.user)
+  implementation(projects.feature.home)
+
+  implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.appcompat)
-  implementation(libs.androidx.activity)
-  implementation(libs.androidx.constraintlayout)
-
-  // modules for unit test
-  testImplementation(projects.core.local)
-  testImplementation(projects.core.test)
-  androidTestImplementation(projects.core.test)
-
-  // androidx
   implementation(libs.material)
-  implementation(libs.androidx.fragment)
-  implementation(libs.androidx.lifecycle)
-  implementation(libs.androidx.startup)
-  implementation(libs.androidx.palette)
+  implementation(libs.androidx.constraintlayout)
+  implementation(libs.androidx.navigation.fragment)
+  implementation(libs.androidx.navigation.ui)
+  testImplementation(libs.junit)
+  androidTestImplementation(libs.androidx.junit)
+  androidTestImplementation(libs.androidx.espresso)
+
+  // Hilt
+  implementation(libs.hilt.android)
+  kapt(libs.hilt.compiler)
 
   // Compose
   implementation(platform(libs.androidx.compose.bom))
   implementation(libs.androidx.compose.ui)
-  implementation(libs.androidx.compose.ui.tooling)
   implementation(libs.androidx.compose.ui.tooling.preview)
   implementation(libs.androidx.compose.foundation)
   implementation(libs.androidx.compose.material3)
   implementation(libs.androidx.activity.compose)
-
-  // Navigation
-  implementation(libs.androidx.navigation.fragment)
-  implementation(libs.androidx.navigation.ui)
-
-  // di
-  implementation(libs.hilt.android)
-  ksp(libs.hilt.compiler)
-  androidTestImplementation(libs.hilt.testing)
-  kspAndroidTest(libs.hilt.compiler)
-
-  // coroutines
-  implementation(libs.coroutines)
-
-  // image loading
-  implementation(libs.glide)
-
-  // unit test
-  testImplementation(libs.junit)
-  testImplementation(libs.turbine)
-  testImplementation(libs.androidx.test.core)
-  testImplementation(libs.mockito.core)
-  testImplementation(libs.mockito.kotlin)
-  testImplementation(libs.coroutines.test)
-  androidTestImplementation(libs.truth)
-  androidTestImplementation(libs.androidx.junit)
-  androidTestImplementation(libs.androidx.espresso)
-  androidTestImplementation(libs.android.test.runner)
-
-  implementation(libs.multidex)
 }

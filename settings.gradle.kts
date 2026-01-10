@@ -1,7 +1,5 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-
-
 pluginManagement {
   repositories {
     // fetch plugins from google maven (https://maven.google.com)
@@ -103,3 +101,5 @@ include(":feature:cash_out")
 include(":feature:customers")
 include(":feature:proof")
 include(":feature:common_ui")
+include(":feature:home")
+include(":feature:user")

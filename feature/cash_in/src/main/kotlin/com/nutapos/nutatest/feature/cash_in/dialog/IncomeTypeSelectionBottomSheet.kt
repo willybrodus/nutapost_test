@@ -5,9 +5,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,8 +42,10 @@ sealed class IncomeType(val title: String, val description: String, val example:
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun IncomeTypeSelectionBottomSheet(
+    sheetState: SheetState,
     onDismiss: () -> Unit,
     onSelected: (IncomeType) -> Unit,
     initialSelected: IncomeType? = null
@@ -48,52 +53,57 @@ fun IncomeTypeSelectionBottomSheet(
     val options = listOf(IncomeType.OtherIncome, IncomeType.NonIncome)
     var selectedOption by remember { mutableStateOf(initialSelected) }
 
-    NutaTestBottomSheet(
-        title = "Pilih Jenis Pendapatan",
-        onDismissRequest = onDismiss
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState
     ) {
-        Column {
-            options.forEachIndexed { index, option ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .selectable(
+        NutaTestBottomSheet(
+            title = "Pilih Jenis Pendapatan",
+            onDismissRequest = onDismiss
+        ) {
+            Column {
+                options.forEachIndexed { index, option ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .selectable(
+                                selected = (option == selectedOption),
+                                onClick = { 
+                                    selectedOption = option
+                                    onSelected(option)
+                                 },
+                                role = Role.RadioButton
+                            )
+                            .padding(24.dp),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = option.title,
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
+                                color = TextValue
+                            )
+                            Text(
+                                text = option.description,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = TextValue,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                            Text(
+                                text = option.example,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = TextValue,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                        }
+                        RadioButton(
                             selected = (option == selectedOption),
-                            onClick = { 
-                                selectedOption = option
-                                onSelected(option)
-                             },
-                            role = Role.RadioButton
-                        )
-                        .padding(24.dp),
-                    verticalAlignment = Alignment.Top
-                ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = option.title,
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
-                            color = TextValue
-                        )
-                        Text(
-                            text = option.description,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = TextValue,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
-                        Text(
-                            text = option.example,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = TextValue,
-                            modifier = Modifier.padding(top = 8.dp)
+                            onClick = null
                         )
                     }
-                    RadioButton(
-                        selected = (option == selectedOption),
-                        onClick = null
-                    )
-                }
-                if (index < options.lastIndex) {
-                    HorizontalDivider(color = DialogDividerColor)
+                    if (index < options.lastIndex) {
+                        HorizontalDivider(color = DialogDividerColor)
+                    }
                 }
             }
         }
@@ -104,6 +114,54 @@ fun IncomeTypeSelectionBottomSheet(
 @Composable
 private fun IncomeTypeSelectionBottomSheetPreview() {
     NutaTestTheme {
-        IncomeTypeSelectionBottomSheet(onDismiss = {}, onSelected = {})
+        NutaTestBottomSheet(
+            title = "Pilih Jenis Pendapatan",
+            onDismissRequest = {}
+        ) {
+            val options = listOf(IncomeType.OtherIncome, IncomeType.NonIncome)
+            var selectedOption by remember { mutableStateOf<IncomeType?>(IncomeType.OtherIncome) }
+            Column {
+                options.forEachIndexed { index, option ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .selectable(
+                                selected = (option == selectedOption),
+                                onClick = { selectedOption = option },
+                                role = Role.RadioButton
+                            )
+                            .padding(24.dp),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = option.title,
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium),
+                                color = TextValue
+                            )
+                            Text(
+                                text = option.description,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = TextValue,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                            Text(
+                                text = option.example,
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = TextValue,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+                        }
+                        RadioButton(
+                            selected = (option == selectedOption),
+                            onClick = null
+                        )
+                    }
+                    if (index < options.lastIndex) {
+                        HorizontalDivider(color = DialogDividerColor)
+                    }
+                }
+            }
+        }
     }
 }

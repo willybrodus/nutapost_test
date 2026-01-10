@@ -1,6 +1,10 @@
 package com.nutapos.nutatest.feature.cash_in.form
 
+import android.Manifest
+import android.content.Context
 import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -38,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -46,6 +51,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.nutapos.nutatest.core.ui.component.NutaTestButton
@@ -60,6 +66,7 @@ import com.nutapos.nutatest.feature.cash_in.dialog.IncomeTypeSelectionBottomShee
 import com.nutapos.nutatest.feature.proof.ImagePickerBottomSheet
 import com.nutapos.nutatest.feature.proof.function.ImagePickerAction
 import com.nutapos.nutatest.feature.proof.function.ImagePickerHandler
+import java.io.File
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -186,6 +193,7 @@ fun CashInFormScreen(
 
     if (showIncomeTypeBottomSheet) {
         IncomeTypeSelectionBottomSheet(
+            sheetState = incomeTypeSheetState,
             onDismiss = { showIncomeTypeBottomSheet = false },
             initialSelected = incomeType,
             onSelected = { selected ->
