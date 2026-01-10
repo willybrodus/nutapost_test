@@ -1,4 +1,4 @@
-package com.nutapos.nutatest.core.domain.model
+package com.nutapos.nutatest.core.domain.model.cash_in
 
 /**
  * Represents a single transaction item in the cash inflow report list.

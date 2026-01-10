@@ -1,6 +1,6 @@
-package com.nutapos.nutatest.core.domain.usecase
+package com.nutapos.nutatest.core.domain.usecase.cash_in
 
-import com.nutapos.nutatest.core.domain.model.CashInflowDetails
+import com.nutapos.nutatest.core.domain.model.cash_in.CashInflowDetails
 import com.nutapos.nutatest.core.data.repository.CashInflowRepository
 import com.nutapos.nutatest.core.data.repository.CustomerRepository
 import com.nutapos.nutatest.core.data.repository.UserRepository

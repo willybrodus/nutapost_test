@@ -1,4 +1,4 @@
-package com.nutapos.nutatest.core.domain.model
+package com.nutapos.nutatest.core.domain.model.cash_in
 
 data class CashInflowDetails(
     val createdDateTime: String,

@@ -1,4 +1,4 @@
-package com.nutapos.nutatest.core.domain.usecase
+package com.nutapos.nutatest.core.domain.usecase.user
 
 import com.nutapos.nutatest.core.local.entity.User
 import com.nutapos.nutatest.core.data.repository.UserRepository

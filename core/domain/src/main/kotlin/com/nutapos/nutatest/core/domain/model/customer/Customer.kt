@@ -1,4 +1,4 @@
-package com.nutapos.nutatest.core.domain.model
+package com.nutapos.nutatest.core.domain.model.customer
 
 data class Customer(
     val id: Long = 0,
