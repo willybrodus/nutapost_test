@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Customer List -->
+    <string name="title_customers">Pelanggan</string>
+    <string name="action_add_new_customer">Tambah pelanggan baru</string>
+    <string name="hint_search_customer">Cari pelanggan di sini</string>
+    <string name="empty_customer_title">Belum Ada Pelanggan</string>
+    <string name="empty_customer_description">Data pelanggan masih kosong.</string>
+
+    <!-- Customer Form -->
+    <string name="title_add_customer">Tambah Pelanggan</string>
+    <string name="title_edit_customer">Ubah Pelanggan</string>
+    <string name="action_save">Simpan</string>
+    <string name="label_customer_name">Nama Pelanggan</string>
+    <string name="hint_customer_name">Masukkan nama pelanggan</string>
+    <string name="label_phone_number">Nomor HP</string>
+    <string name="hint_phone_number">081320xxxx</string>
+    <string name="label_email">Email</string>
+    <string name="hint_email">contoh@gmail.com</string>
+    <string name="label_status">Status</string>
+    <string name="label_detail_customer">Detail Pelanggan</string>
+    <string name="option_member">Member</string>
+    <string name="option_non_member">Bukan Member</string>
+</resources>

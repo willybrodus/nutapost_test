@@ -2,7 +2,10 @@ plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.kotlin.android)
   alias(libs.plugins.kotlin.compose.compiler)
+  alias(libs.plugins.kotlin.kapt)
   alias(libs.plugins.ksp)
+  alias(libs.plugins.kotlin.parcelize)
+  alias(libs.plugins.hilt.plugin)
 }
 
 android {
@@ -32,6 +35,9 @@ dependencies {
   implementation(libs.androidx.compose.material3)
   implementation(libs.androidx.activity.compose)
 
+  // Glide
+  implementation(libs.glide.compose)
+
   implementation(libs.coroutines)
   implementation(libs.coroutines.test)
   // Hilt
@@ -52,4 +58,19 @@ dependencies {
   testImplementation(libs.androidx.test.core)
   testImplementation(libs.mockito.core)
   testImplementation(libs.mockito.kotlin)
+
+  // di
+  implementation(libs.hilt.android)
+  ksp(libs.hilt.compiler)
+
+  // androidx
+  implementation(libs.material)
+  implementation(libs.androidx.fragment)
+  implementation(libs.androidx.lifecycle)
+  implementation(libs.androidx.startup)
+  implementation(libs.androidx.palette)
+
+  // Navigation
+  implementation(libs.androidx.navigation.fragment)
+  implementation(libs.androidx.navigation.ui)
 }

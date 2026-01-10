@@ -2,7 +2,10 @@ plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.kotlin.android)
   alias(libs.plugins.kotlin.compose.compiler)
+  alias(libs.plugins.kotlin.kapt)
   alias(libs.plugins.ksp)
+  alias(libs.plugins.kotlin.parcelize)
+  alias(libs.plugins.hilt.plugin)
 }
 
 android {
@@ -51,4 +54,15 @@ dependencies {
   testImplementation(libs.androidx.test.core)
   testImplementation(libs.mockito.core)
   testImplementation(libs.mockito.kotlin)
+
+  // androidx
+  implementation(libs.material)
+  implementation(libs.androidx.fragment)
+  implementation(libs.androidx.lifecycle)
+  implementation(libs.androidx.startup)
+  implementation(libs.androidx.palette)
+
+  // Navigation
+  implementation(libs.androidx.navigation.fragment)
+  implementation(libs.androidx.navigation.ui)
 }
