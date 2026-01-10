@@ -1,12 +1,15 @@
 package com.nutapos.nutatest.core.ui.component
 
 import androidx.annotation.DrawableRes
+import androidx.appcompat.R as appCompat
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -17,17 +20,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.nutapos.nutatest.core.ui.R
 import com.nutapos.nutatest.core.ui.theme.NutaTestTheme
 
 @Composable
 fun NutaTestEmptyState(
-    title: String,
-    description: String,
-    modifier: Modifier = Modifier,
-    @DrawableRes image: Int? = null,
+  title: String,
+  description: String,
+  modifier: Modifier = Modifier,
+  @DrawableRes image: Int? = R.drawable.empty_state_icon,
 ) {
     Column(
-        modifier = modifier.fillMaxSize().padding(24.dp),
+        modifier = modifier.width(IntrinsicSize.Max)
+          .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -38,16 +43,14 @@ fun NutaTestEmptyState(
           modifier = Modifier.size(200.dp) // Ukuran bisa disesuaikan
         )
       }
-
         Text(
             text = title,
-            modifier = Modifier.padding(top = 24.dp),
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center
         )
         Text(
             text = description,
-            modifier = Modifier.padding(top = 8.dp),
+            modifier = Modifier.padding(top = 8.dp, bottom = 8.dp),
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center
         )

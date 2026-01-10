@@ -3,6 +3,7 @@ package com.nutapos.nutatest.core.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val GreenMain = Color(0xFF3DAE2F)
+val GreenSecondary = Color(0xFFF0FBEF)
 
 val Text4 = Color(0xFF525867)
 
@@ -25,3 +26,9 @@ val DangerMain = Color(0xFFFF3553)
 val TextLabel = Color(0xFF4B5258)
 val TextHint = Color(0xFF869098)
 val TextValue = Color(0xFF212426)
+val NoteBackground = Color(0xFFECEDEF)
+
+val DividerColor = Color(0xFFF4F5F6)
+val DialogDividerColor = Color(0xFFB8B8B8)
+val ToastPositiveBackground = Color(0xFF2C6B3A)
+val ToastNegativeBackground = Color(0xFFFF3553)

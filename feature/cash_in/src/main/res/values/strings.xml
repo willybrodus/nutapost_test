@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cash_in_title">Uang Masuk</string>
+    <string name="cash_in_create_transaction">Buat transaksi uang masuk</string>
+    <string name="cash_in_empty_title">Belum Ada Transaksi Uang Masuk</string>
+    <string name="cash_in_empty_description">Silahkan atur periode untuk menampilkan transaksi uang masuk.</string>
+    <string name="cash_in_set_period">Atur periode</string>
+
+    <string name="title_create_cash_in_transaction">Buat Transaksi Uang Masuk</string>
+    <string name="action_save">Simpan</string>
+    <string name="label_cash_in_to">Masuk Ke</string>
+    <string name="label_received_from">Terima Dari</string>
+    <string name="hint_select_customer">Masukkan nama atau pilih pelanggan</string>
+    <string name="label_description">Keterangan</string>
+    <string name="hint_description">Contoh: Menjual kemasan kardus</string>
+    <string name="label_amount">Jumlah</string>
+    <string name="label_income_type">Jenis Pendapatan</string>
+    <string name="hint_select_income_type">Pilih jenis pendapatan</string>
+    <string name="title_upload_proof">Upload bukti transfer / nota / kwitansi</string>
+    <string name="text_image_format_info">hanya menggunakan format .JPG .PNG</string>
+
+    <!-- Cash In Detail -->
+    <string name="title_cash_in_detail">Detail Uang Masuk</string>
+    <string name="action_edit_transaction">Ubah transaksi</string>
+    <string name="action_delete">Hapus</string>
+    <string name="label_created_date">Tanggal Dibuat</string>
+    <string name="content_description_proof_transfer">Bukti Transfer</string>
+    <string name="text_no_proof_transfer">Tidak ada bukti transfer</string>
+    <string name="title_delete_cash_in">Hapus Uang Masuk</string>
+    <string name="desc_delete_cash_in">Apakah Anda ingin menghapus detail uang masuk ini?</string>
+</resources>

@@ -3,4 +3,8 @@
   <color name="colorPrimary">#313131</color>
   <color name="colorPrimaryDark">#1e1e1e</color>
   <color name="colorAccent">#90C74A</color>
+  <color name="cash_in_button_background">#64B5F6</color>
+  <color name="cash_in_button_text_color">#FFFFFF</color>
+  <color name="cash_in_atur_periode_background">#E3F2FD</color>
+  <color name="cash_in_atur_periode_text_color">#64B5F6</color>
 </resources>

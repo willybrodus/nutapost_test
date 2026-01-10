@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Nuta Test</string>
+    <string name="finance">Keuangan</string>
+    <string name="cash_in">Uang Masuk</string>
+    <string name="cash_out">Uang Keluar</string>
 </resources>

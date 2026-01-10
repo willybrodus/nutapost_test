@@ -69,6 +69,7 @@ dependencies {
   // modules
   implementation(projects.core.data)
   implementation(projects.core.ui)
+  implementation(projects.core.utils)
   implementation(libs.androidx.appcompat)
   implementation(libs.androidx.activity)
   implementation(libs.androidx.constraintlayout)
@@ -94,6 +95,10 @@ dependencies {
   implementation(libs.androidx.compose.material3)
   implementation(libs.androidx.activity.compose)
 
+  // Navigation
+  implementation(libs.androidx.navigation.fragment)
+  implementation(libs.androidx.navigation.ui)
+
   // di
   implementation(libs.hilt.android)
   ksp(libs.hilt.compiler)
@@ -105,11 +110,6 @@ dependencies {
 
   // image loading
   implementation(libs.glide)
-
-  // recyclerView
-  implementation(libs.recyclerview)
-  implementation(libs.baseAdapter)
-
 
   // unit test
   testImplementation(libs.junit)

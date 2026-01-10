@@ -14,8 +14,7 @@ androidxPalette = "1.0.0"
 hilt = "2.56.2"
 coroutines = "1.10.2"
 glide = "4.16.0"
-recyclerView = "1.4.0"
-baseAdapter = "1.0.4"
+glide-compose = "1.0.0-beta01"
 truth = "1.4.4"
 junit = "4.13.2"
 turbine = "1.2.1"
@@ -32,6 +31,7 @@ constraintlayout = "2.2.1"
 coreKtx = "1.16.0"
 room = "2.8.4"
 composeBom = "2024.06.00"
+navigation = "2.8.5"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -59,8 +59,7 @@ hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref 
 coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
-recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerView" }
-baseAdapter = { module = "com.github.skydoves:baserecyclerviewadapter", version.ref = "baseAdapter" }
+glide-compose = { module = "com.github.bumptech.glide:compose", version.ref = "glide-compose" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
@@ -90,3 +89,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+
+# Navigation
+androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
+androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }

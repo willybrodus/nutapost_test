@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_navigation_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.nutapos.nutatest.ui.main.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
+
+        <deepLink
+            android:id="@+id/deeplink_home"
+            app:uri="gtl-driver://home?is_fm_notification={is_fm_notification}" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/cashInFragment"
+        android:name="com.nutapos.nutatest.cash_in.CashInFragment"
+        android:label="CashInFragment" >
+        <deepLink
+            android:id="@+id/deeplink_cash_in"
+            app:uri="nutatest://cash_in" />
+    </fragment>
+
+</navigation>
