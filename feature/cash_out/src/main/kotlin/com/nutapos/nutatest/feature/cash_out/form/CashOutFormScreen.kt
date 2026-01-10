@@ -65,245 +65,248 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CashOutFormScreen(
-    onBackClick: () -> Unit,
-    onNavigateToPaidToSelection: () -> Unit,
+  onBackClick: () -> Unit,
+  onNavigateToPaidToSelection: () -> Unit,
 ) {
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
-    var imagePickerAction by remember { mutableStateOf<ImagePickerAction?>(null) }
+  var imageUri by remember { mutableStateOf<Uri?>(null) }
+  var imagePickerAction by remember { mutableStateOf<ImagePickerAction?>(null) }
 
-    var outcomeType by remember { mutableStateOf<OutcomeType?>(null) }
-    var amount by remember { mutableStateOf(TextFieldValue("0")) }
-    var description by remember { mutableStateOf("") }
+  var outcomeType by remember { mutableStateOf<OutcomeType?>(null) }
+  var amount by remember { mutableStateOf(TextFieldValue("0")) }
+  var description by remember { mutableStateOf("") }
 
-    val outcomeTypeSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var showOutcomeTypeBottomSheet by remember { mutableStateOf(false) }
+  val outcomeTypeSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+  var showOutcomeTypeBottomSheet by remember { mutableStateOf(false) }
 
-    val imagePickerSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var showImagePickerBottomSheet by remember { mutableStateOf(false) }
+  val imagePickerSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+  var showImagePickerBottomSheet by remember { mutableStateOf(false) }
 
-    val coroutineScope = rememberCoroutineScope()
+  val coroutineScope = rememberCoroutineScope()
 
-    ImagePickerHandler(
-        action = imagePickerAction,
-        onImagePicked = { imageUri = it },
-        onActionCompleted = { imagePickerAction = null }
+  ImagePickerHandler(
+    action = imagePickerAction,
+    onImagePicked = { imageUri = it },
+    onActionCompleted = { imagePickerAction = null }
+  )
+
+  Scaffold(
+    topBar = {
+      NutaTestTopAppBar(
+        title = stringResource(R.string.title_create_cash_out_transaction),
+        onNavigationClick = onBackClick
+      )
+    },
+    bottomBar = {
+      NutaTestButton(
+        modifier = Modifier
+          .fillMaxWidth()
+          .padding(16.dp),
+        text = stringResource(R.string.action_save),
+        onClick = { /* Handle save */ }
+      )
+    }
+  ) { paddingValues ->
+    Column(
+      modifier = Modifier
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState())
+        .padding(paddingValues)
+        .padding(16.dp)
+    ) {
+      NutaTestReadOnlyTextField(
+        label = stringResource(R.string.label_cash_out_from),
+        value = "Kasir Perangkat ke-49"
+      )
+      Spacer(modifier = Modifier.height(16.dp))
+      NutaTestTextField(
+        modifier = Modifier.fillMaxWidth(),
+        value = description,
+        onValueChange = { description = it },
+        label = stringResource(R.string.label_description),
+        placeholder = stringResource(R.string.hint_description_cash_out)
+      )
+      Spacer(modifier = Modifier.height(16.dp))
+      NutaTestCurrencyTextField(
+        modifier = Modifier.fillMaxWidth(),
+        label = stringResource(R.string.label_amount),
+        value = amount.text,
+        onValueChange = { amount = TextFieldValue(it) }
+      )
+      Spacer(modifier = Modifier.height(16.dp))
+      NutaTestReadOnlyTextField(
+        label = stringResource(R.string.label_outcome_type),
+        value = outcomeType?.title ?: "",
+        placeholder = stringResource(R.string.hint_select_outcome_type),
+        onClick = { showOutcomeTypeBottomSheet = true },
+        trailingContent = {
+          Icon(
+            painter = painterResource(id = R.drawable.ic_arrow_right),
+            contentDescription = null
+          )
+        }
+      )
+      Spacer(modifier = Modifier.height(24.dp))
+      Text(
+        text = stringResource(R.string.title_upload_proof),
+        style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
+      )
+      Spacer(modifier = Modifier.height(16.dp))
+
+      if (imageUri == null) {
+        ImagePlaceholder(onClick = { showImagePickerBottomSheet = true })
+      } else {
+        ImagePreview(
+          imageUri = imageUri!!,
+          onDeleteClick = { imageUri = null },
+          onEditClick = { showImagePickerBottomSheet = true }
+        )
+      }
+      Spacer(modifier = Modifier.height(8.dp))
+      Text(
+        text = stringResource(R.string.text_image_format_info),
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+        style = TextStyle(color = Color.Gray, fontSize = 12.sp)
+      )
+    }
+  }
+
+  if (showOutcomeTypeBottomSheet) {
+    OutcomeTypeSelectionBottomSheet(
+      outcomeTypeSheetState,
+      onDismiss = { showOutcomeTypeBottomSheet = false },
+      initialSelected = outcomeType,
+      onSelected = { selected ->
+        outcomeType = selected
+        coroutineScope.launch {
+          outcomeTypeSheetState.hide()
+        }.invokeOnCompletion {
+          if (!outcomeTypeSheetState.isVisible) {
+            showOutcomeTypeBottomSheet = false
+          }
+        }
+      }
     )
+  }
 
-    Scaffold(
-        topBar = {
-            NutaTestTopAppBar(
-                title = stringResource(R.string.title_create_cash_out_transaction),
-                onNavigationClick = onBackClick
-            )
-        },
-        bottomBar = {
-            NutaTestButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                text = stringResource(R.string.action_save),
-                onClick = { /* Handle save */ }
-            )
+  if (showImagePickerBottomSheet) {
+    ImagePickerBottomSheet(
+      sheetState = imagePickerSheetState,
+      onDismiss = { showImagePickerBottomSheet = false },
+      onGalleryClick = {
+        coroutineScope.launch { imagePickerSheetState.hide() }.invokeOnCompletion {
+          showImagePickerBottomSheet = false
+          imagePickerAction = ImagePickerAction.PickFromGallery
         }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(paddingValues)
-                .padding(16.dp)
-        ) {
-            NutaTestReadOnlyTextField(
-                label = stringResource(R.string.label_cash_out_from),
-                value = "Kasir Perangkat ke-49"
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            NutaTestTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = description,
-                onValueChange = { description = it },
-                label = stringResource(R.string.label_description),
-                placeholder = stringResource(R.string.hint_description_cash_out)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            NutaTestCurrencyTextField(
-                modifier = Modifier.fillMaxWidth(),
-                label = stringResource(R.string.label_amount),
-                value = amount.text,
-                onValueChange = { amount = TextFieldValue(it) }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            NutaTestReadOnlyTextField(
-                label = stringResource(R.string.label_outcome_type),
-                value = outcomeType?.title ?: "",
-                placeholder = stringResource(R.string.hint_select_outcome_type),
-                onClick = { showOutcomeTypeBottomSheet = true },
-                trailingContent = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_arrow_right),
-                        contentDescription = null
-                    )
-                }
-            )
-            Spacer(modifier = Modifier.height(24.dp))
-            Text(
-                text = stringResource(R.string.title_upload_proof),
-                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            if (imageUri == null) {
-                ImagePlaceholder(onClick = { showImagePickerBottomSheet = true })
-            } else {
-                ImagePreview(
-                    imageUri = imageUri!!,
-                    onDeleteClick = { imageUri = null },
-                    onEditClick = { showImagePickerBottomSheet = true }
-                )
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = stringResource(R.string.text_image_format_info),
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                style = TextStyle(color = Color.Gray, fontSize = 12.sp)
-            )
+      },
+      onCameraClick = {
+        coroutineScope.launch { imagePickerSheetState.hide() }.invokeOnCompletion {
+          showImagePickerBottomSheet = false
+          imagePickerAction = ImagePickerAction.TakePhoto
         }
-    }
-
-    if (showOutcomeTypeBottomSheet) {
-        OutcomeTypeSelectionBottomSheet(
-            onDismiss = { showOutcomeTypeBottomSheet = false },
-            initialSelected = outcomeType,
-            onSelected = { selected ->
-                outcomeType = selected
-                coroutineScope.launch {
-                    outcomeTypeSheetState.hide()
-                }.invokeOnCompletion {
-                    if (!outcomeTypeSheetState.isVisible) {
-                        showOutcomeTypeBottomSheet = false
-                    }
-                }
-            }
-        )
-    }
-
-    if (showImagePickerBottomSheet) {
-        ImagePickerBottomSheet(
-            sheetState = imagePickerSheetState,
-            onDismiss = { showImagePickerBottomSheet = false },
-            onGalleryClick = {
-                coroutineScope.launch { imagePickerSheetState.hide() }.invokeOnCompletion {
-                    showImagePickerBottomSheet = false
-                    imagePickerAction = ImagePickerAction.PickFromGallery
-                }
-            },
-            onCameraClick = {
-                coroutineScope.launch { imagePickerSheetState.hide() }.invokeOnCompletion {
-                    showImagePickerBottomSheet = false
-                    imagePickerAction = ImagePickerAction.TakePhoto
-                }
-            }
-        )
-    }
+      }
+    )
+  }
 }
 
 @Composable
 private fun NutaTestReadOnlyTextField(
-    label: String,
-    value: String,
-    placeholder: String = "",
-    onClick: (() -> Unit)? = null,
-    trailingContent: @Composable (() -> Unit)? = null
+  label: String,
+  value: String,
+  placeholder: String = "",
+  onClick: (() -> Unit)? = null,
+  trailingContent: @Composable (() -> Unit)? = null
 ) {
-    NutaTestTextField(
-        value = value,
-        onValueChange = {},
-        label = label,
-        placeholder = placeholder,
-        readOnly = true,
-        onTextFieldClick = onClick,
-        trailingContent = trailingContent
-    )
+  NutaTestTextField(
+    value = value,
+    onValueChange = {},
+    label = label,
+    placeholder = placeholder,
+    readOnly = true,
+    onTextFieldClick = onClick,
+    trailingContent = trailingContent
+  )
 }
 
 @Composable
 private fun ImagePlaceholder(onClick: () -> Unit) {
+  Box(
+    modifier = Modifier
+      .fillMaxWidth()
+      .height(150.dp)
+      .clip(RoundedCornerShape(16.dp))
+      .drawBehind {
+        val stroke = Stroke(
+          width = 1.5.dp.toPx(),
+          pathEffect = PathEffect.dashPathEffect(floatArrayOf(25f, 15f), 0f)
+        )
+        drawRoundRect(
+          color = GreenMain,
+          cornerRadius = CornerRadius(16.dp.toPx()),
+          style = stroke
+        )
+      }
+      .clickable(onClick = onClick),
+    contentAlignment = Alignment.Center
+  ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(150.dp)
-            .clip(RoundedCornerShape(16.dp))
-            .drawBehind {
-                val stroke = Stroke(
-                    width = 1.5.dp.toPx(),
-                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(25f, 15f), 0f)
-                )
-                drawRoundRect(
-                    color = GreenMain,
-                    cornerRadius = CornerRadius(16.dp.toPx()),
-                    style = stroke
-                )
-            }
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
+      modifier = Modifier
+        .size(48.dp)
+        .background(color = GreenMain, shape = CircleShape),
+      contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier
-                .size(48.dp)
-                .background(color = GreenMain, shape = CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(Icons.Default.Add, contentDescription = "Add Photo", tint = Color.White)
-        }
+      Icon(Icons.Default.Add, contentDescription = "Add Photo", tint = Color.White)
     }
+  }
 }
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 private fun ImagePreview(
-    imageUri: Uri,
-    onDeleteClick: () -> Unit,
-    onEditClick: () -> Unit
+  imageUri: Uri,
+  onDeleteClick: () -> Unit,
+  onEditClick: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxWidth().height(150.dp)) {
-        GlideImage(
-            model = imageUri,
-            contentDescription = "Selected Image",
-            modifier = Modifier
-                .matchParentSize()
-                .clip(RoundedCornerShape(8.dp)),
-            contentScale = ContentScale.Crop
-        )
-        IconButton(
-            onClick = onEditClick,
-            modifier = Modifier.align(Alignment.TopEnd)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_edit),
-                contentDescription = "Edit",
-                tint = Color.White
-            )
-        }
-        IconButton(
-            onClick = onDeleteClick,
-            modifier = Modifier.align(Alignment.BottomEnd)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_delete),
-                contentDescription = "Delete",
-                tint = Color.Red
-            )
-        }
+  Box(modifier = Modifier
+    .fillMaxWidth()
+    .height(150.dp)) {
+    GlideImage(
+      model = imageUri,
+      contentDescription = "Selected Image",
+      modifier = Modifier
+        .matchParentSize()
+        .clip(RoundedCornerShape(8.dp)),
+      contentScale = ContentScale.Crop
+    )
+    IconButton(
+      onClick = onEditClick,
+      modifier = Modifier.align(Alignment.TopEnd)
+    ) {
+      Icon(
+        painter = painterResource(id = R.drawable.ic_edit),
+        contentDescription = "Edit",
+        tint = Color.White
+      )
     }
+    IconButton(
+      onClick = onDeleteClick,
+      modifier = Modifier.align(Alignment.BottomEnd)
+    ) {
+      Icon(
+        painter = painterResource(id = R.drawable.ic_delete),
+        contentDescription = "Delete",
+        tint = Color.Red
+      )
+    }
+  }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CashOutFormScreenPreview() {
-    NutaTestTheme {
-        CashOutFormScreen(
-            onBackClick = {},
-            onNavigateToPaidToSelection = {}
-        )
-    }
+  NutaTestTheme {
+    CashOutFormScreen(
+      onBackClick = {},
+      onNavigateToPaidToSelection = {}
+    )
+  }
 }

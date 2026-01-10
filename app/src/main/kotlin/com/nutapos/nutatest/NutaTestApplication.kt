@@ -1,9 +1,9 @@
 package com.nutapos.nutatest
 
-import androidx.multidex.MultiDexApplication
+import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class NutaTestApplication : MultiDexApplication() {
+class NutaTestApplication : Application() {
 
 }
