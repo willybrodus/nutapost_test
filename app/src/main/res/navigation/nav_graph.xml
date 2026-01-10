@@ -13,5 +13,6 @@
 
     <include app:graph="@navigation/nav_cash_in" />
     <include app:graph="@navigation/nav_cash_out" />
+    <include app:graph="@navigation/nav_customers" />
 
 </navigation>
