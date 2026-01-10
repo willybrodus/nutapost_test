@@ -1,6 +1,7 @@
 package com.nutapos.nutatest.feature.cash_in.form
 
 import android.Manifest
+import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -59,21 +60,25 @@ import com.nutapos.nutatest.core.ui.component.NutaTestTextField
 import com.nutapos.nutatest.core.ui.component.NutaTestTopAppBar
 import com.nutapos.nutatest.core.ui.theme.GreenMain
 import com.nutapos.nutatest.core.ui.theme.NutaTestTheme
-import com.nutapos.nutatest.core.utils.permission.PermissionsManager
 import com.nutapos.nutatest.feature.cash_in.R
 import com.nutapos.nutatest.feature.cash_in.dialog.IncomeType
 import com.nutapos.nutatest.feature.cash_in.dialog.IncomeTypeSelectionBottomSheet
 import com.nutapos.nutatest.feature.proof.ImagePickerBottomSheet
 import java.io.File
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
+@OptIn(
+  ExperimentalMaterial3Api::class
+) 
+@Composable 
 fun CashInFormScreen(
     onBackClick: () -> Unit,
     onNavigateToCustomerSelection: () -> Unit,
 ) {
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
+  
+  var imageUri by remember { mutableStateOf<Uri?>(null) }
     var tempCameraUri by remember { mutableStateOf<Uri?>(null) }
 
     var receivedFrom by remember { mutableStateOf("") }
@@ -90,17 +95,35 @@ fun CashInFormScreen(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    fun createImageUri(): Uri {
-        val file = File.createTempFile("camera_photo_", ".jpg", context.externalCacheDir)
+    fun createPrivateImageFile(): Pair<File, Uri> {
+        val imageDir = File(context.filesDir, "images")
+        if (!imageDir.exists()) imageDir.mkdirs()
+        val file = File.createTempFile("camera_photo_", ".jpg", imageDir)
         val authority = "${context.packageName}.provider"
-        return FileProvider.getUriForFile(context, authority, file)
+        val uri = FileProvider.getUriForFile(context, authority, file)
+        return Pair(file, uri)
+    }
+
+    fun copyUriToPrivateStorage(uri: Uri): Uri {
+        val (_, privateUri) = createPrivateImageFile()
+        context.contentResolver.openInputStream(uri)?.use { input ->
+            context.contentResolver.openOutputStream(privateUri)?.use { output ->
+                input.copyTo(output)
+            }
+        }
+        return privateUri
     }
 
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             if (uri != null) {
-                imageUri = uri
+                coroutineScope.launch(Dispatchers.IO) {
+                    val privateUri = copyUriToPrivateStorage(uri)
+                    withContext(Dispatchers.Main) {
+                        imageUri = privateUri
+                    }
+                }
             }
         }
     )
@@ -118,7 +141,7 @@ fun CashInFormScreen(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
             if (isGranted) {
-                val newUri = createImageUri()
+                val (_, newUri) = createPrivateImageFile()
                 tempCameraUri = newUri
                 cameraLauncher.launch(newUri)
             }
@@ -249,13 +272,7 @@ fun CashInFormScreen(
             onCameraClick = {
                 coroutineScope.launch { imagePickerSheetState.hide() }.invokeOnCompletion {
                     showImagePickerBottomSheet = false
-                    if (PermissionsManager.isGranted(context, Manifest.permission.CAMERA)) {
-                        val newUri = createImageUri()
-                        tempCameraUri = newUri
-                        cameraLauncher.launch(newUri)
-                    } else {
-                        cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-                    }
+                    cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
                 }
             }
         )

@@ -8,6 +8,7 @@
   <string name="label_created_date">Tanggal Dibuat</string>
   <string name="label_cash_out_from">Keluar dari</string>
   <string name="label_description">Keterangan</string>
+  <string name="hint_description_cash_out">Tulis keperluan uang keluar Anda</string>
   <string name="label_amount">Jumlah</string>
   <string name="label_outcome_type">Jenis Pengeluaran</string>
   <string name="title_upload_proof">Upload bukti transfer / nota / kwitansi</string>

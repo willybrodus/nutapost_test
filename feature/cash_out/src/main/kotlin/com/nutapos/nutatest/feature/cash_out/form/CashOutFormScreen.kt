@@ -1,6 +1,7 @@
 package com.nutapos.nutatest.feature.cash_out.form
 
 import android.Manifest
+import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -59,13 +60,14 @@ import com.nutapos.nutatest.core.ui.component.NutaTestTextField
 import com.nutapos.nutatest.core.ui.component.NutaTestTopAppBar
 import com.nutapos.nutatest.core.ui.theme.GreenMain
 import com.nutapos.nutatest.core.ui.theme.NutaTestTheme
-import com.nutapos.nutatest.core.utils.permission.PermissionsManager
 import com.nutapos.nutatest.feature.cash_out.R
 import com.nutapos.nutatest.feature.cash_out.dialog.OutcomeType
 import com.nutapos.nutatest.feature.cash_out.dialog.OutcomeTypeSelectionBottomSheet
 import com.nutapos.nutatest.feature.proof.ImagePickerBottomSheet
 import java.io.File
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,17 +92,35 @@ fun CashOutFormScreen(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    fun createImageUri(): Uri {
-        val file = File.createTempFile("camera_photo_", ".jpg", context.externalCacheDir)
+    fun createPrivateImageFile(): Pair<File, Uri> {
+        val imageDir = File(context.filesDir, "images")
+        if (!imageDir.exists()) imageDir.mkdirs()
+        val file = File.createTempFile("camera_photo_", ".jpg", imageDir)
         val authority = "${context.packageName}.provider"
-        return FileProvider.getUriForFile(context, authority, file)
+        val uri = FileProvider.getUriForFile(context, authority, file)
+        return Pair(file, uri)
+    }
+
+    fun copyUriToPrivateStorage(uri: Uri): Uri {
+        val (_, privateUri) = createPrivateImageFile()
+        context.contentResolver.openInputStream(uri)?.use { input ->
+            context.contentResolver.openOutputStream(privateUri)?.use { output ->
+                input.copyTo(output)
+            }
+        }
+        return privateUri
     }
 
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             if (uri != null) {
-                imageUri = uri
+                coroutineScope.launch(Dispatchers.IO) {
+                    val privateUri = copyUriToPrivateStorage(uri)
+                    withContext(Dispatchers.Main) {
+                        imageUri = privateUri
+                    }
+                }
             }
         }
     )
@@ -118,7 +138,9 @@ fun CashOutFormScreen(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { isGranted ->
             if (isGranted) {
-                tempCameraUri?.let { cameraLauncher.launch(it) }
+                val (_, newUri) = createPrivateImageFile()
+                tempCameraUri = newUri
+                cameraLauncher.launch(newUri)
             }
         }
     )
@@ -150,19 +172,6 @@ fun CashOutFormScreen(
             NutaTestReadOnlyTextField(
                 label = stringResource(R.string.label_cash_out_from),
                 value = "Kasir Perangkat ke-49"
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            NutaTestReadOnlyTextField(
-                label = stringResource(R.string.label_paid_to),
-                value = paidTo,
-                placeholder = stringResource(R.string.hint_select_contact),
-                onClick = onNavigateToPaidToSelection,
-                trailingContent = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_phone_contact),
-                        contentDescription = null
-                    )
-                }
             )
             Spacer(modifier = Modifier.height(16.dp))
             NutaTestTextField(
@@ -247,13 +256,7 @@ fun CashOutFormScreen(
             onCameraClick = {
                 coroutineScope.launch { imagePickerSheetState.hide() }.invokeOnCompletion {
                     showImagePickerBottomSheet = false
-                    val newUri = createImageUri()
-                    tempCameraUri = newUri
-                    if (PermissionsManager.isGranted(context, Manifest.permission.CAMERA)) {
-                        cameraLauncher.launch(newUri)
-                    } else {
-                        cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-                    }
+                    cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
                 }
             }
         )
