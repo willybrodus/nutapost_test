@@ -19,30 +19,33 @@ class GetCashInflowReportUseCase @Inject constructor(
     private val customerRepository: CustomerRepository
 ) {
     /**
-     * Invokes the use case to get a report of all cash inflows, without a date filter.
+     * Invokes the use case to get a report of all cash inflows for a specific user.
      */
-    operator fun invoke(): Flow<List<DailyCashInflowReport>> {
-        return getReport(null, null)
+    operator fun invoke(userId: Long): Flow<List<DailyCashInflowReport>> {
+        return getReport(userId, null, null)
     }
 
     /**
-     * Invokes the use case to get a report of cash inflows within a specific date range.
+     * Invokes the use case to get a report of cash inflows for a specific user within a date range.
      */
-    operator fun invoke(startDate: Long, endDate: Long): Flow<List<DailyCashInflowReport>> {
-        return getReport(startDate, endDate)
+    operator fun invoke(userId: Long, startDate: Long, endDate: Long): Flow<List<DailyCashInflowReport>> {
+        return getReport(userId, startDate, endDate)
     }
 
-    private fun getReport(startDate: Long?, endDate: Long?): Flow<List<DailyCashInflowReport>> {
+    private fun getReport(userId: Long, startDate: Long?, endDate: Long?): Flow<List<DailyCashInflowReport>> {
         return combine(
             cashInflowRepository.getAllCashInflows(),
             userRepository.getAllUsers(),
             customerRepository.getAllCustomers()
         ) { allInflows, allUsers, allCustomers ->
-            // Apply date filter only if start and end dates are provided
+            // Filter by user first
+            val userInflows = allInflows.filter { it.userId == userId }
+
+            // Then, apply date filter if start and end dates are provided
             val filteredInflows = if (startDate != null && endDate != null) {
-                allInflows.filter { it.createdAt in startDate..endDate }
+                userInflows.filter { it.createdAt in startDate..endDate }
             } else {
-                allInflows
+                userInflows
             }
 
             if (filteredInflows.isEmpty()) {

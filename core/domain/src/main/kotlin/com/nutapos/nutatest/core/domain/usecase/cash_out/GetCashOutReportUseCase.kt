@@ -17,28 +17,32 @@ class GetCashOutReportUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     /**
-     * Invokes the use case to get a report of all cash outflows, without a date filter.
+     * Invokes the use case to get a report of all cash outflows for a specific user.
      */
-    operator fun invoke(): Flow<List<DailyCashOutReport>> {
-        return getReport(null, null)
+    operator fun invoke(userId: Long): Flow<List<DailyCashOutReport>> {
+        return getReport(userId, null, null)
     }
 
     /**
-     * Invokes the use case to get a report of cash outflows within a specific date range.
+     * Invokes the use case to get a report of cash outflows for a specific user within a date range.
      */
-    operator fun invoke(startDate: Long, endDate: Long): Flow<List<DailyCashOutReport>> {
-        return getReport(startDate, endDate)
+    operator fun invoke(userId: Long, startDate: Long, endDate: Long): Flow<List<DailyCashOutReport>> {
+        return getReport(userId, startDate, endDate)
     }
 
-    private fun getReport(startDate: Long?, endDate: Long?): Flow<List<DailyCashOutReport>> {
+    private fun getReport(userId: Long, startDate: Long?, endDate: Long?): Flow<List<DailyCashOutReport>> {
         return combine(
             cashOutRepository.getAllCashOuts(),
             userRepository.getAllUsers()
         ) { allOutflows, allUsers ->
+            // Filter by user first
+            val userOutflows = allOutflows.filter { it.userId == userId }
+
+            // Then, apply date filter if start and end dates are provided
             val filteredOutflows = if (startDate != null && endDate != null) {
-                allOutflows.filter { it.createdAt in startDate..endDate }
+                userOutflows.filter { it.createdAt in startDate..endDate }
             } else {
-                allOutflows
+                userOutflows
             }
 
             if (filteredOutflows.isEmpty()) {
