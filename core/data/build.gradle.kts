@@ -17,6 +17,9 @@ dependencies {
   implementation(projects.core.local)
   testImplementation(projects.core.test)
 
+  // DataStore
+  implementation(libs.androidx.datastore.preferences)
+
   // coroutines
   implementation(libs.coroutines)
   testImplementation(libs.coroutines)

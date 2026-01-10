@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="title_finance">Keuangan: /n %s</string>
-  <string name="cash_in_title">Uang Masuk</string>
-  <string name="cash_out_title">Uang Keluar</string>
-  <string name="action_switch_user">Ganti User</string>
-  <string name="action_select_user">Pilih User</string>
-  <string name="action_create_user">Buat User</string>
+    <string name="title_finance_default">Keuangan</string>
+    <string name="title_finance_user">Keuangan\n%s</string>
+    <string name="cash_in_title">Uang Masuk</string>
+    <string name="cash_out_title">Uang Keluar</string>
+    <string name="action_switch_user">Ganti User</string>
+    <string name="action_select_user">Pilih User</string>
+    <string name="action_create_user">Buat User Baru</string>
 </resources>

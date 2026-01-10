@@ -11,18 +11,18 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
+    @Query("SELECT * FROM users")
+    fun getAllUsers(): Flow<List<User>>
+
+    @Query("SELECT * FROM users WHERE id = :id")
+    fun getUserById(id: Long): Flow<User?>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(user: User)
+    suspend fun insert(user: User): Long
 
     @Update
-    suspend fun updateUser(user: User)
+    suspend fun update(user: User)
 
     @Delete
-    suspend fun deleteUser(user: User)
-
-    @Query("SELECT * FROM users WHERE isLogin = 1")
-    fun getUserLogin(): Flow<User?>
-
-    @Query("SELECT * FROM users ORDER BY name ASC")
-    fun getAllUsers(): Flow<List<User>>
+    suspend fun delete(user: User)
 }

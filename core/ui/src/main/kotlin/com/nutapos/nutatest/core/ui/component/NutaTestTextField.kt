@@ -42,27 +42,27 @@ fun NutaTestTextField(
     readOnly: Boolean = false,
     onTextFieldClick: (() -> Unit)? = null
 ) {
-    val isValueEmpty = value.isEmpty()
-
-    val textToDisplay = if (isValueEmpty) placeholder.orEmpty() else value
-    val textColor = if (isValueEmpty) TextHint else TextValue
-
     OutlinedTextField(
-        value = textToDisplay,
-        onValueChange = {
-            val newValue = if (isValueEmpty && placeholder != null) it.lastOrNull()?.toString() ?: "" else it
-            onValueChange(newValue)
-        },
+        value = value,
+        onValueChange = onValueChange,
         modifier = modifier.fillMaxWidth(),
         readOnly = readOnly,
-        textStyle = MaterialTheme.typography.bodyLarge.copy(color = textColor),
+        textStyle = MaterialTheme.typography.bodyLarge.copy(color = TextValue),
         label = {
             Text(
                 text = label,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodySmall
             )
         },
-        placeholder = null,
+        placeholder = {
+            if (placeholder != null) {
+                Text(
+                    text = placeholder,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = TextHint
+                )
+            }
+        },
         leadingIcon = leadingContent,
         trailingIcon = trailingContent,
         interactionSource = remember { MutableInteractionSource() }
@@ -78,8 +78,8 @@ fun NutaTestTextField(
                 }
             },
         colors = OutlinedTextFieldDefaults.colors(
-            unfocusedLabelColor = TextLabel,
-            focusedLabelColor = TextLabel,
+            unfocusedLabelColor = TextLabel, // Keep label color consistent
+            focusedLabelColor = TextLabel,   // Keep label color consistent
             unfocusedBorderColor = Fill3,
             focusedBorderColor = GreenMain,
         )

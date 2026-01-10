@@ -3,71 +3,75 @@ package com.nutapos.nutatest.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nutapos.nutatest.core.domain.model.user.User
+import com.nutapos.nutatest.core.domain.usecase.session.GetLoggedInUserIdUseCase
+import com.nutapos.nutatest.core.domain.usecase.session.SetLoggedInUserIdUseCase
 import com.nutapos.nutatest.core.domain.usecase.user.GetAllUsersUseCase
 import com.nutapos.nutatest.core.domain.usecase.user.InsertUserUseCase
-import com.nutapos.nutatest.core.domain.usecase.user.UpdateUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class HomeUiState(
-  val users: List<User> = emptyList(),
-  val loggedInUser: User? = null,
-  val isLoading: Boolean = true
+    val users: List<User> = emptyList(),
+    val loggedInUser: User? = null,
+    val isLoading: Boolean = true
 )
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getAllUsersUseCase: GetAllUsersUseCase,
+    private val getLoggedInUserIdUseCase: GetLoggedInUserIdUseCase,
+    private val setLoggedInUserIdUseCase: SetLoggedInUserIdUseCase,
     private val insertUserUseCase: InsertUserUseCase,
-    private val updateUserUseCase: UpdateUserUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
-        loadUsers()
+        loadData()
     }
 
-    private fun loadUsers() {
+    private fun loadData() {
         viewModelScope.launch {
-            getAllUsersUseCase().collect { users ->
+            combine(
+                getAllUsersUseCase(),
+                getLoggedInUserIdUseCase()
+            ) { users, loggedInUserId ->
                 _uiState.update {
                     it.copy(
                         users = users,
-                        loggedInUser = users.find { user -> user.isLogin },
+                        loggedInUser = users.find { user -> user.id == loggedInUserId },
                         isLoading = false
                     )
                 }
-            }
+            }.collect()
         }
     }
 
     fun createUser(name: String) {
         viewModelScope.launch {
-            val newUser = User(name = name, isLogin = true)
-            // Log out other users first
-            _uiState.value.loggedInUser?.let { logout(it) }
-            insertUserUseCase(newUser)
+            val newUser = User(name = name)
+            val newUserId = insertUserUseCase(newUser)
+            setLoggedInUserIdUseCase(newUserId)
         }
     }
 
     fun login(user: User) {
         viewModelScope.launch {
-            // Log out other users first
-            _uiState.value.loggedInUser?.let { logout(it) }
-            updateUserUseCase(user.copy(isLogin = true))
+            setLoggedInUserIdUseCase(user.id)
         }
     }
 
-    fun logout(user: User) {
+    fun logout() {
         viewModelScope.launch {
-            updateUserUseCase(user.copy(isLogin = false))
+            setLoggedInUserIdUseCase(null)
         }
     }
 }

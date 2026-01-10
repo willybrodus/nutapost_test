@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_cash_in"
+    app:startDestination="@id/cashInListFragment">
+
+    <fragment
+        android:id="@+id/cashInListFragment"
+        android:name="com.nutapos.nutatest.feature.cash_in.report.CashInListFragment"
+        android:label="CashInListFragment">
+        <action
+            android:id="@+id/action_cashInListFragment_to_cashInFormFragment"
+            app:destination="@id/cashInFormFragment" />
+        <action
+            android:id="@+id/action_cashInListFragment_to_cashInDetailFragment"
+            app:destination="@id/cashInDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cashInFormFragment"
+        android:name="com.nutapos.nutatest.feature.cash_in.form.CashInFormFragment"
+        android:label="CashInFormFragment" />
+
+    <fragment
+        android:id="@+id/cashInDetailFragment"
+        android:name="com.nutapos.nutatest.feature.cash_in.detail.CashInDetailFragment"
+        android:label="CashInDetailFragment">
+        <action
+            android:id="@+id/action_cashInDetailFragment_to_cashInFormFragment"
+            app:destination="@+id/cashInFormFragment" />
+    </fragment>
+
+</navigation>
