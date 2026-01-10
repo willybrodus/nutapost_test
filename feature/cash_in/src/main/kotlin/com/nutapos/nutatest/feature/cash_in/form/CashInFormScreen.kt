@@ -1,10 +1,6 @@
 package com.nutapos.nutatest.feature.cash_in.form
 
-import android.Manifest
-import android.content.Context
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -42,7 +38,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -51,7 +46,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.nutapos.nutatest.core.ui.component.NutaTestButton
@@ -64,22 +58,18 @@ import com.nutapos.nutatest.feature.cash_in.R
 import com.nutapos.nutatest.feature.cash_in.dialog.IncomeType
 import com.nutapos.nutatest.feature.cash_in.dialog.IncomeTypeSelectionBottomSheet
 import com.nutapos.nutatest.feature.proof.ImagePickerBottomSheet
-import java.io.File
-import kotlinx.coroutines.Dispatchers
+import com.nutapos.nutatest.feature.proof.function.ImagePickerAction
+import com.nutapos.nutatest.feature.proof.function.ImagePickerHandler
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-@OptIn(
-  ExperimentalMaterial3Api::class
-) 
-@Composable 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun CashInFormScreen(
     onBackClick: () -> Unit,
     onNavigateToCustomerSelection: () -> Unit,
 ) {
-  
-  var imageUri by remember { mutableStateOf<Uri?>(null) }
-    var tempCameraUri by remember { mutableStateOf<Uri?>(null) }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var imagePickerAction by remember { mutableStateOf<ImagePickerAction?>(null) }
 
     var receivedFrom by remember { mutableStateOf("") }
     var incomeType by remember { mutableStateOf<IncomeType?>(null) }
@@ -93,59 +83,11 @@ fun CashInFormScreen(
     var showImagePickerBottomSheet by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
-    val context = LocalContext.current
 
-    fun createPrivateImageFile(): Pair<File, Uri> {
-        val imageDir = File(context.filesDir, "images")
-        if (!imageDir.exists()) imageDir.mkdirs()
-        val file = File.createTempFile("camera_photo_", ".jpg", imageDir)
-        val authority = "${context.packageName}.provider"
-        val uri = FileProvider.getUriForFile(context, authority, file)
-        return Pair(file, uri)
-    }
-
-    fun copyUriToPrivateStorage(uri: Uri): Uri {
-        val (_, privateUri) = createPrivateImageFile()
-        context.contentResolver.openInputStream(uri)?.use { input ->
-            context.contentResolver.openOutputStream(privateUri)?.use { output ->
-                input.copyTo(output)
-            }
-        }
-        return privateUri
-    }
-
-    val galleryLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = { uri ->
-            if (uri != null) {
-                coroutineScope.launch(Dispatchers.IO) {
-                    val privateUri = copyUriToPrivateStorage(uri)
-                    withContext(Dispatchers.Main) {
-                        imageUri = privateUri
-                    }
-                }
-            }
-        }
-    )
-
-    val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture(),
-        onResult = { success ->
-            if (success) {
-                imageUri = tempCameraUri
-            }
-        }
-    )
-
-    val cameraPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted ->
-            if (isGranted) {
-                val (_, newUri) = createPrivateImageFile()
-                tempCameraUri = newUri
-                cameraLauncher.launch(newUri)
-            }
-        }
+    ImagePickerHandler(
+        action = imagePickerAction,
+        onImagePicked = { imageUri = it },
+        onActionCompleted = { imagePickerAction = null }
     )
 
     Scaffold(
@@ -266,13 +208,13 @@ fun CashInFormScreen(
             onGalleryClick = {
                 coroutineScope.launch { imagePickerSheetState.hide() }.invokeOnCompletion {
                     showImagePickerBottomSheet = false
-                    galleryLauncher.launch("image/*")
+                    imagePickerAction = ImagePickerAction.PickFromGallery
                 }
             },
             onCameraClick = {
                 coroutineScope.launch { imagePickerSheetState.hide() }.invokeOnCompletion {
                     showImagePickerBottomSheet = false
-                    cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                    imagePickerAction = ImagePickerAction.TakePhoto
                 }
             }
         )
