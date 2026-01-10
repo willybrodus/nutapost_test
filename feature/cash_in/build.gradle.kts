@@ -33,6 +33,7 @@ dependencies {
   implementation(projects.core.ui)
   implementation(projects.feature.proof)
   implementation(projects.feature.commonUi)
+  implementation(projects.core.utils)
 
   implementation(libs.androidx.core.ktx)
   implementation(libs.androidx.appcompat)
