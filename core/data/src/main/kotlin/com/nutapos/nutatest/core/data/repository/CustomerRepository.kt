@@ -8,7 +8,7 @@ import javax.inject.Inject
 interface CustomerRepository {
     fun getAllCustomers(): Flow<List<Customer>>
     fun getCustomerById(id: Long): Flow<Customer?>
-    suspend fun insertCustomer(customer: Customer)
+    suspend fun insertCustomer(customer: Customer): Long
     suspend fun updateCustomer(customer: Customer)
     suspend fun deleteCustomer(customer: Customer)
 }
@@ -18,7 +18,7 @@ class CustomerRepositoryImpl @Inject constructor(
 ) : CustomerRepository {
     override fun getAllCustomers(): Flow<List<Customer>> = customerDao.getAllCustomers()
     override fun getCustomerById(id: Long): Flow<Customer?> = customerDao.getCustomerById(id)
-    override suspend fun insertCustomer(customer: Customer) = customerDao.insertCustomer(customer)
+    override suspend fun insertCustomer(customer: Customer): Long = customerDao.insertCustomer(customer)
     override suspend fun updateCustomer(customer: Customer) = customerDao.updateCustomer(customer)
     override suspend fun deleteCustomer(customer: Customer) = customerDao.deleteCustomer(customer)
 }

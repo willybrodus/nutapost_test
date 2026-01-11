@@ -10,10 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -31,14 +29,29 @@ import com.nutapos.nutatest.feature.customers.list.components.CustomerListItem
 
 @Composable
 fun CustomerListScreen(
+  viewModel: CustomerListViewModel,
+  onNavigateBack: () -> Unit,
+  onNavigateToCreate: () -> Unit,
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    CustomerListScreen(
+        uiState = uiState,
+        onNavigateBack = onNavigateBack,
+        onNavigateToCreate = onNavigateToCreate,
+        onCustomerSelected = viewModel::onCustomerSelected,
+        onSearchQueryChanged = viewModel::onSearchQueryChanged
+    )
+}
+
+@Composable
+private fun CustomerListScreen(
+  uiState: CustomerListState,
   onNavigateBack: () -> Unit,
   onNavigateToCreate: () -> Unit,
   onCustomerSelected: (Customer) -> Unit,
-  customers: List<Customer>,
-  selectedCustomer: Customer?
+  onSearchQueryChanged: (String) -> Unit
 ) {
-  var searchQuery by remember { mutableStateOf("") }
-
   Scaffold(
     topBar = {
       NutaTestTopAppBar(
@@ -58,8 +71,8 @@ fun CustomerListScreen(
   ) { paddingValues ->
     Column(modifier = Modifier.padding(paddingValues)) {
       NutaTestTextField(
-        value = searchQuery,
-        onValueChange = { searchQuery = it },
+        value = uiState.searchQuery,
+        onValueChange = onSearchQueryChanged,
         label = "",
         placeholder = stringResource(id = R.string.hint_search_customer),
         leadingContent = {
@@ -71,7 +84,7 @@ fun CustomerListScreen(
         modifier = Modifier.padding(16.dp)
       )
 
-      if (customers.isEmpty()) {
+      if (uiState.customers.isEmpty()) {
         Box(
           modifier = Modifier.fillMaxSize(),
           contentAlignment = Alignment.Center
@@ -83,15 +96,15 @@ fun CustomerListScreen(
         }
       } else {
         LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
-          items(customers.size) { index ->
-            val customer = customers[index]
+          items(uiState.customers.size) { index ->
+            val customer = uiState.customers[index]
             Column(modifier = Modifier.clickable { onCustomerSelected(customer) }) {
               CustomerListItem(
                 name = customer.name,
                 phoneNumber = customer.phoneNumber,
                 email = customer.email,
                 isMember = customer.isMember,
-                isSelected = customer.id == selectedCustomer?.id
+                isSelected = customer.id == uiState.selectedCustomer?.id
               )
             }
           }
@@ -120,11 +133,11 @@ fun CustomerListScreenPreview() {
 
   NutaTestTheme {
     CustomerListScreen(
+      uiState = CustomerListState(customers = dummyCustomers, selectedCustomer = dummyCustomers[3]),
       onNavigateBack = {},
       onNavigateToCreate = {},
       onCustomerSelected = {},
-      customers = dummyCustomers,
-      selectedCustomer = dummyCustomers[3]
+      onSearchQueryChanged = {}
     )
   }
 }
@@ -134,11 +147,11 @@ fun CustomerListScreenPreview() {
 fun CustomerListScreenEmptyPreview() {
   NutaTestTheme {
     CustomerListScreen(
+      uiState = CustomerListState(customers = emptyList()),
       onNavigateBack = {},
       onNavigateToCreate = {},
       onCustomerSelected = {},
-      customers = emptyList(),
-      selectedCustomer = null
+      onSearchQueryChanged = {}
     )
   }
 }

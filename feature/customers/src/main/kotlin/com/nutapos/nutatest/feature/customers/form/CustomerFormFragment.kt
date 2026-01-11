@@ -63,11 +63,17 @@ class CustomerFormFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch {
+            viewModel.createdCustomerId.collectLatest { customerId ->
+                if (customerId != null) {
+                    findNavController().previousBackStackEntry?.savedStateHandle?.set("new_customer_id", customerId)
+                    findNavController().popBackStack()
+                }
+            }
+        }
+
+        lifecycleScope.launch {
             viewModel.showToast.collectLatest { message ->
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                if (!viewModel.isLoading.value) { // Only pop back if not loading
-                  findNavController().popBackStack()
-                }
             }
         }
     }

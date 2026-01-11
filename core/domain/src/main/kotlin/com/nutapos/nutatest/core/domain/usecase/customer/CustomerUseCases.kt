@@ -21,7 +21,7 @@ class GetCustomerByIdUseCase @Inject constructor(private val customerRepository:
 }
 
 class InsertCustomerUseCase @Inject constructor(private val customerRepository: CustomerRepository) {
-    suspend operator fun invoke(customer: Customer) = 
+    suspend operator fun invoke(customer: Customer): Long = 
         customerRepository.insertCustomer(customer.toEntity())
 }
 

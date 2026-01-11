@@ -30,6 +30,9 @@ class CustomerFormViewModel @Inject constructor(
     private val _showToast = MutableSharedFlow<String>()
     val showToast = _showToast.asSharedFlow()
 
+    private val _createdCustomerId = MutableSharedFlow<Long?>()
+    val createdCustomerId = _createdCustomerId.asSharedFlow()
+
     fun loadCustomer(customerId: Long) {
         viewModelScope.launch {
             getCustomerByIdUseCase(customerId).collect {
@@ -53,7 +56,8 @@ class CustomerFormViewModel @Inject constructor(
                     email = email,
                     isMember = isMember
                 )
-                insertCustomerUseCase(customer)
+                val newCustomerId = insertCustomerUseCase(customer)
+                _createdCustomerId.emit(newCustomerId)
                 _showToast.emit("berhasil disimpan")
             } catch (e: Exception) {
                 _showToast.emit("Gagal menyimpan: ${e.message}")
