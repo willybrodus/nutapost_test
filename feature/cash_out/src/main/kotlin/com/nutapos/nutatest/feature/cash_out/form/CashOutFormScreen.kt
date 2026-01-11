@@ -57,6 +57,8 @@ import com.nutapos.nutatest.core.ui.component.NutaTestTopAppBar
 import com.nutapos.nutatest.core.ui.theme.GreenMain
 import com.nutapos.nutatest.core.ui.theme.NutaTestTheme
 import com.nutapos.nutatest.feature.cash_out.R
+import com.nutapos.nutatest.feature.cash_out.dialog.OutcomeType
+import com.nutapos.nutatest.feature.cash_out.dialog.OutcomeTypeSelectionBottomSheet
 import com.nutapos.nutatest.feature.proof.ImagePickerBottomSheet
 import com.nutapos.nutatest.feature.proof.function.ImagePickerAction
 import com.nutapos.nutatest.feature.proof.function.ImagePickerHandler
@@ -76,10 +78,13 @@ fun CashOutFormScreen(
 
     var description by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
-    var outcomeType by remember { mutableStateOf("Operational") } // Default value
+    var outcomeType by remember { mutableStateOf<OutcomeType>(OutcomeType.Income) } // Default value
 
     val imagePickerSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showImagePickerBottomSheet by remember { mutableStateOf(false) }
+
+    val outcomeTypeSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showOutcomeTypeSheet by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -93,7 +98,11 @@ fun CashOutFormScreen(
         cashOut?.let {
             description = it.note
             amount = it.amount.toString()
-            outcomeType = it.outcomeType
+            outcomeType = when (it.outcomeType) {
+                OutcomeType.Income.title -> OutcomeType.Income
+                OutcomeType.Modal.title -> OutcomeType.Modal
+                else -> OutcomeType.Income
+            }
             it.proof?.let { uriString -> imageUri = Uri.parse(uriString) }
         }
     }
@@ -116,7 +125,7 @@ fun CashOutFormScreen(
                         paidFrom = loggedInUserName,
                         description = description,
                         amount = amount,
-                        outcomeType = outcomeType,
+                        outcomeType = outcomeType.title,
                         proofImageUrl = imageUri?.toString()
                     )
                     onSaveCashOut(formState)
@@ -145,12 +154,19 @@ fun CashOutFormScreen(
                 placeholder = stringResource(R.string.hint_description_cash_out)
             )
             Spacer(modifier = Modifier.height(16.dp))
-          NutaTestCurrencyTextField(
-              modifier = Modifier.fillMaxWidth(),
-              label = stringResource(R.string.label_amount),
-              value = amount,
-              onValueChange = { amount = it },
-          )
+            NutaTestCurrencyTextField(
+                modifier = Modifier.fillMaxWidth(),
+                label = stringResource(R.string.label_amount),
+                value = amount,
+                onValueChange = { amount = it },
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            NutaTestReadOnlyTextField(
+                label = stringResource(R.string.label_outcome_type),
+                value = outcomeType.title,
+                placeholder = stringResource(id = R.string.hint_select_outcome_type),
+                onClick = { showOutcomeTypeSheet = true }
+            )
             Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = stringResource(R.string.title_upload_proof),
@@ -192,6 +208,21 @@ fun CashOutFormScreen(
                     imagePickerAction = ImagePickerAction.TakePhoto
                 }
             }
+        )
+    }
+
+    if (showOutcomeTypeSheet) {
+        OutcomeTypeSelectionBottomSheet(
+            sheetState = outcomeTypeSheetState,
+            onDismiss = { showOutcomeTypeSheet = false },
+            onSelected = {
+                outcomeType = it
+                coroutineScope.launch {
+                    outcomeTypeSheetState.hide()
+                    showOutcomeTypeSheet = false
+                }
+            },
+            initialSelected = outcomeType
         )
     }
 }
