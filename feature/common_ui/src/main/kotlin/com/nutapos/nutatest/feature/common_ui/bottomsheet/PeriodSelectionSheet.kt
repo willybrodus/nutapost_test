@@ -183,6 +183,7 @@ fun PeriodSelectionDialog(
           Text("Batal", color = GreenMain)
         }
       },
+      tonalElevation = 0.dp,
       properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
       DateRangePicker(
