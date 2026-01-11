@@ -53,7 +53,9 @@ class CashOutFormViewModel @Inject constructor(
 
   fun loadCashOut(cashOutId: Long) {
     viewModelScope.launch {
-      val user = _loggedInUser.value
+      val user = getLoggedInUserUseCase().first()?.let {
+        getUserLogin(it)
+      }?.first()
       if (user != null) {
         getCashOutByIdUseCase(cashOutId, user).collect {
           _cashOut.value = it

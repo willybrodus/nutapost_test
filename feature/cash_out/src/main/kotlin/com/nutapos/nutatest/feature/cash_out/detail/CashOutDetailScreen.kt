@@ -167,7 +167,7 @@ fun CashOutDetailScreenPreview() {
                 note = "Beli Aqua",
                 amount = 50000.0,
                 sourceOutcomeType = "Modal",
-                proof = null,
+                proof = null
             ),
             onBackClick = {},
             onEditClick = {},

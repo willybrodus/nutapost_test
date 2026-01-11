@@ -1,5 +1,6 @@
 package com.nutapos.nutatest.feature.cash_out.list.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,7 +23,8 @@ fun CashOutListGroup(
     modifier: Modifier = Modifier,
     date: String,
     total: String,
-    transactions: List<CashOutTransaction>
+    transactions: List<CashOutTransaction>,
+    onTransactionClick: (Long) -> Unit
 ) {
     Column(modifier = modifier) {
         Row(
@@ -50,7 +52,8 @@ fun CashOutListGroup(
                     cashOutFrom = transaction.cashOutFrom,
                     amount = transaction.amount,
                     description = transaction.description,
-                    sourceOutcomeType = transaction.sourceOutcomeType
+                    sourceOutcomeType = transaction.sourceOutcomeType,
+                    onClick = { onTransactionClick(transaction.id) }
                 )
             }
         }

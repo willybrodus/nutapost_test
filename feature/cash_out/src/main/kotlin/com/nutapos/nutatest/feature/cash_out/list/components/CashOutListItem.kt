@@ -1,5 +1,6 @@
 package com.nutapos.nutatest.feature.cash_out.list.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,11 +24,13 @@ fun CashOutListItem(
   cashOutFrom: String,
   amount: String,
   description: String?,
+  onClick: () -> Unit
 ) {
   Column(
     modifier = Modifier
       .fillMaxWidth()
       .padding(vertical = 12.dp)
+      .clickable(onClick = onClick)
   ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
       Icon(

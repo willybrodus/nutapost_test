@@ -1,6 +1,7 @@
 package com.nutapos.nutatest.feature.cash_out.list.components
 
 data class CashOutTransaction(
+    val id: Long,
     val time: String,
     val cashOutFrom: String,
     val amount: String,

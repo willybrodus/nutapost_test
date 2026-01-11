@@ -56,6 +56,7 @@ data class CashOutGroup(
 fun CashOutListScreen(
     onNavigateBack: () -> Unit,
     onNavigateToCreate: () -> Unit,
+    onNavigateToDetail: (Long) -> Unit,
     groups: List<CashOutGroup> = emptyList(),
     dateRange: Pair<Date?, Date?>,
     onDateRangeSelected: (Date, Date) -> Unit
@@ -147,7 +148,8 @@ fun CashOutListScreen(
                         CashOutListGroup(
                             date = group.date,
                             total = group.total,
-                            transactions = group.transactions
+                            transactions = group.transactions,
+                            onTransactionClick = onNavigateToDetail
                         )
                     }
                 }
@@ -175,6 +177,7 @@ fun CashOutListScreenEmptyPreview() {
             CashOutListScreen(
                 onNavigateBack = {},
                 onNavigateToCreate = {},
+                onNavigateToDetail = {},
                 groups = emptyList(),
                 dateRange = Pair(null, null),
                 onDateRangeSelected = { _, _ -> }
@@ -187,11 +190,11 @@ fun CashOutListScreenEmptyPreview() {
 @Composable
 fun CashOutListScreenWithDataPreview() {
     val dummyTransactions1 = listOf(
-        CashOutTransaction("08:42:56", "Kasir perangkat ke-49", "Rp 50.000", "Galon Aqua", "Modal"),
-        CashOutTransaction("08:42:56", "Kasir perangkat ke-49", "Rp 25.000", "Listrik Token 25k", "Pendapatan")
+        CashOutTransaction(1, "08:42:56", "Kasir perangkat ke-49", "Rp 50.000", "Galon Aqua", "Modal"),
+        CashOutTransaction(2, "08:42:56", "Kasir perangkat ke-49", "Rp 25.000", "Listrik Token 25k", "Pendapatan")
     )
     val dummyTransactions2 = listOf(
-        CashOutTransaction("08:42:56", "Kasir perangkat ke-49", "Rp 15.000", "Iuran Sampah", "Modal")
+        CashOutTransaction(3, "08:42:56", "Kasir perangkat ke-49", "Rp 15.000", "Iuran Sampah", "Modal")
     )
     val dummyGroups = listOf(
         CashOutGroup("Senin, 22 April 2024", "Rp 75.000", dummyTransactions1),
@@ -203,6 +206,7 @@ fun CashOutListScreenWithDataPreview() {
             CashOutListScreen(
                 onNavigateBack = {},
                 onNavigateToCreate = {},
+                onNavigateToDetail = {},
                 groups = dummyGroups,
                 dateRange = Pair(Date(), Date()),
                 onDateRangeSelected = { _, _ -> }

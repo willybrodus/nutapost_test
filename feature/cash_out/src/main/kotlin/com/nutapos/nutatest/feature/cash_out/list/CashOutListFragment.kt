@@ -36,12 +36,17 @@ class CashOutListFragment : Fragment() {
                             val action = CashOutListFragmentDirections.actionCashOutListFragmentToCashOutFormFragment()
                             findNavController().navigate(action)
                         },
+                        onNavigateToDetail = { id ->
+                            val action = CashOutListFragmentDirections.actionCashOutListFragmentToCashOutDetailFragment(id)
+                            findNavController().navigate(action)
+                        },
                         groups = cashOutReport.map {
                             CashOutGroup(
                                 date = it.formattedDate,
                                 total = it.dailyTotal,
                                 transactions = it.transactions.map { item ->
                                   CashOutTransaction(
+                                    id = item.id,
                                     time = item.time,
                                     cashOutFrom = item.paidBy,
                                     amount = item.amount,
