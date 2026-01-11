@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_cash_out"
     app:startDestination="@id/cashOutListFragment">
 
     <fragment
         android:id="@+id/cashOutListFragment"
         android:name="com.nutapos.nutatest.feature.cash_out.list.CashOutListFragment"
-        android:label="CashOutListFragment">
+        android:label="CashOutListFragment"
+        tools:layout="@layout/fragment_cash_out_list" >
         <action
             android:id="@+id/action_cashOutListFragment_to_cashOutFormFragment"
             app:destination="@id/cashOutFormFragment" />
-        <action
-            android:id="@+id/action_cashOutListFragment_to_cashOutDetailFragment"
-            app:destination="@id/cashOutDetailFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/cashOutFormFragment"
         android:name="com.nutapos.nutatest.feature.cash_out.form.CashOutFormFragment"
-        android:label="CashOutFormFragment" />
-
-    <fragment
-        android:id="@+id/cashOutDetailFragment"
-        android:name="com.nutapos.nutatest.feature.cash_out.detail.CashOutDetailFragment"
-        android:label="CashOutDetailFragment">
-        <action
-            android:id="@+id/action_cashOutDetailFragment_to_cashOutFormFragment"
-            app:destination="@+id/cashOutFormFragment" />
+        android:label="CashOutFormFragment"
+        tools:layout="@layout/fragment_cash_out_form">
+        <argument
+            android:name="cashOutId"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
 
 </navigation>

@@ -34,3 +34,4 @@ class DeleteUserUseCase @Inject constructor(private val userRepository: UserRepo
     suspend operator fun invoke(user: User) = 
         userRepository.deleteUser(user.toEntity())
 }
+

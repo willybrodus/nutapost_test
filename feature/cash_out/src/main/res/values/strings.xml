@@ -10,6 +10,7 @@
   <string name="label_description">Keterangan</string>
   <string name="hint_description_cash_out">Tulis keperluan uang keluar Anda</string>
   <string name="label_amount">Jumlah</string>
+  <string name="hint_amount">Rp.0</string>
   <string name="label_outcome_type">Jenis Pengeluaran</string>
   <string name="title_upload_proof">Upload bukti transfer / nota / kwitansi</string>
   <string name="content_description_proof_transfer">Bukti Transfer</string>
@@ -23,4 +24,7 @@
   <string name="cash_out_empty_title">Belum Ada Transaksi Uang Keluar</string>
   <string name="cash_out_empty_description">Silahkan atur periode untuk menampilkan transaksi uang keluar</string>
   <string name="cash_out_set_period">Atur periode</string>
+  <string name="title_add_cash_out">Tambah Uang Keluar</string>
+  <string name="title_edit_cash_out">Ubah Uang Keluar</string>
+  <string name="label_paid_from">Dibayarkan dari</string>
 </resources>
