@@ -4,6 +4,6 @@ data class CashOutflowFormState(
     val paidFrom: String,
     val description: String,
     val amount: String,
-    val outcomeType: String,
+    val sourceOutcomeType: String,
     val proofImageUrl: String?
 )

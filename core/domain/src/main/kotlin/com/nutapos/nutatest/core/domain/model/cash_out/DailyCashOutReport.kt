@@ -12,5 +12,5 @@ data class CashOutReportItem(
     val paidBy: String,
     val note: String,
     val amount: String,
-    val outcomeType: String
+    val sourceOutcomeType: String
 )

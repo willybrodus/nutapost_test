@@ -18,7 +18,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CustomerListViewModel @Inject constructor(
+class CustomerListViewModel
+@Inject
+constructor(
     private val getAllCustomersUseCase: GetAllCustomersUseCase,
     private val searchCustomersUseCase: SearchCustomersUseCase,
     private val getCustomerByIdUseCase: GetCustomerByIdUseCase

@@ -20,7 +20,7 @@ data class CashOut(
     val userId: Long,
     val note: String,
     val amount: Double,
-    val outcomeType: String,
+    val sourceOutcomeType: String,
     val proof: String?,
     val createdAt: Long = System.currentTimeMillis()
 )

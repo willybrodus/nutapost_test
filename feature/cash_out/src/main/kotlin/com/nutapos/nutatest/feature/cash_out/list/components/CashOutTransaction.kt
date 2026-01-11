@@ -5,5 +5,5 @@ data class CashOutTransaction(
     val cashOutFrom: String,
     val amount: String,
     val description: String?,
-    val outcomeType: String
+    val sourceOutcomeType: String
 )

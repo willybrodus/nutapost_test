@@ -50,7 +50,7 @@ fun CashOutListGroup(
                     cashOutFrom = transaction.cashOutFrom,
                     amount = transaction.amount,
                     description = transaction.description,
-                    outcomeType = transaction.outcomeType
+                    sourceOutcomeType = transaction.sourceOutcomeType
                 )
             }
         }

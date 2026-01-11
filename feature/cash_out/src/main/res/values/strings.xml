@@ -11,13 +11,13 @@
   <string name="hint_description_cash_out">Tulis keperluan uang keluar Anda</string>
   <string name="label_amount">Jumlah</string>
   <string name="hint_amount">Rp.0</string>
-  <string name="label_outcome_type">Jenis Pengeluaran</string>
+  <string name="label_source_outcome_type">Sumber Pengeluaran</string>
   <string name="title_upload_proof">Upload bukti transfer / nota / kwitansi</string>
   <string name="content_description_proof_transfer">Bukti Transfer</string>
   <string name="text_no_proof_transfer">Tidak ada bukti transfer</string>
   <string name="title_create_cash_out_transaction">Buat Transaksi Uang Keluar</string>
   <string name="action_save">Simpan</string>
-  <string name="hint_select_outcome_type">Pilih jenis pengeluaran</string>
+  <string name="hint_select_source_outcome_type">Pilih sumber pengeluaran</string>
   <string name="text_image_format_info">hanya menggunakan format .JPG .PNG</string>
   <string name="cash_out_title">Uang Keluar</string>
   <string name="cash_out_create_transaction">Buat transaksi uang keluar</string>

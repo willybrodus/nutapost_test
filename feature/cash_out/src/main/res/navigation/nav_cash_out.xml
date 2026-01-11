@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_cashOutListFragment_to_cashOutFormFragment"
             app:destination="@id/cashOutFormFragment" />
+        <action
+            android:id="@+id/action_cashOutListFragment_to_cashOutDetailFragment"
+            app:destination="@id/cashOutDetailFragment" />
     </fragment>
 
     <fragment
@@ -24,6 +27,19 @@
             android:name="cashOutId"
             app:argType="long"
             android:defaultValue="-1L" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cashOutDetailFragment"
+        android:name="com.nutapos.nutatest.feature.cash_out.detail.CashOutDetailFragment"
+        android:label="CashOutDetailFragment"
+        tools:layout="@layout/fragment_cash_out_detail">
+        <argument
+            android:name="cashOutId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_cashOutDetailFragment_to_cashOutFormFragment"
+            app:destination="@id/cashOutFormFragment" />
     </fragment>
 
 </navigation>

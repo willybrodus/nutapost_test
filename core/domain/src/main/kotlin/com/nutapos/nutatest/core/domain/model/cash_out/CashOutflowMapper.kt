@@ -1,5 +1,6 @@
 package com.nutapos.nutatest.core.domain.model.cash_out
 
+import com.nutapos.nutatest.core.domain.model.user.User
 import com.nutapos.nutatest.core.local.entity.CashOut as EntityCashOut
 
 fun CashOutflowFormState.toEntity(userId: Long): EntityCashOut {
@@ -8,20 +9,32 @@ fun CashOutflowFormState.toEntity(userId: Long): EntityCashOut {
         userId = userId,
         note = description,
         amount = cleanAmount,
-        outcomeType = outcomeType,
+        sourceOutcomeType = sourceOutcomeType,
         proof = proofImageUrl,
         createdAt = System.currentTimeMillis()
     )
 }
 
-fun EntityCashOut.toDomainModel():CashOut {
+fun EntityCashOut.toDomainModel(user: User): CashOut {
     return CashOut(
         id = this.id,
-        userId = this.userId,
+        user = user,
         note = this.note,
         amount = this.amount,
-        outcomeType = this.outcomeType,
+        sourceOutcomeType = sourceOutcomeType,
         proof = this.proof,
         createdAt = this.createdAt
     )
+}
+
+fun CashOut.toEntity(): EntityCashOut{
+  return EntityCashOut(
+    id = this.id,
+    userId = this.user.id,
+    note = this.note,
+    amount = this.amount,
+    sourceOutcomeType = this.sourceOutcomeType,
+    proof = this.proof,
+    createdAt = this.createdAt
+  )
 }

@@ -35,7 +35,8 @@ fun UserSelectionSheet(
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        dragHandle = null
+        dragHandle = null,
+        tonalElevation = 0.dp
     ) {
         NutaTestBottomSheet(
             title = stringResource(id = R.string.title_select_user),

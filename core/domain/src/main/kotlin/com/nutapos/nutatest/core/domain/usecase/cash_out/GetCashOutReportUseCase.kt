@@ -76,7 +76,7 @@ class GetCashOutReportUseCase @Inject constructor(
                             paidBy = user?.name ?: "N/A",
                             note = outflow.note.ifEmpty { "-" },
                             amount = outflow.amount.toRupiahFormat(),
-                            outcomeType = outflow.outcomeType
+                          sourceOutcomeType = outflow.sourceOutcomeType
                         )
                     }
 

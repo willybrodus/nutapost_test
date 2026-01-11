@@ -19,7 +19,7 @@ import com.nutapos.nutatest.feature.cash_out.R
 @Composable
 fun CashOutListItem(
   time: String,
-  outcomeType: String,
+  sourceOutcomeType: String,
   cashOutFrom: String,
   amount: String,
   description: String?,
@@ -40,7 +40,7 @@ fun CashOutListItem(
         .weight(1f)) {
         Text(text = time, style = MaterialTheme.typography.bodySmall, color = Text4)
         Text(
-          text = outcomeType,
+          text = sourceOutcomeType,
           style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium)
         )
         Text(text = description ?: "", style = MaterialTheme.typography.bodySmall, color = Text4)

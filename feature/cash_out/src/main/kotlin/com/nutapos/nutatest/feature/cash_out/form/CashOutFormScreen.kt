@@ -57,8 +57,8 @@ import com.nutapos.nutatest.core.ui.component.NutaTestTopAppBar
 import com.nutapos.nutatest.core.ui.theme.GreenMain
 import com.nutapos.nutatest.core.ui.theme.NutaTestTheme
 import com.nutapos.nutatest.feature.cash_out.R
-import com.nutapos.nutatest.feature.cash_out.dialog.OutcomeType
-import com.nutapos.nutatest.feature.cash_out.dialog.OutcomeTypeSelectionBottomSheet
+import com.nutapos.nutatest.feature.cash_out.dialog.SourceOutcomeType
+import com.nutapos.nutatest.feature.cash_out.dialog.SourceOutcomeTypeSelectionBottomSheet
 import com.nutapos.nutatest.feature.proof.ImagePickerBottomSheet
 import com.nutapos.nutatest.feature.proof.function.ImagePickerAction
 import com.nutapos.nutatest.feature.proof.function.ImagePickerHandler
@@ -78,13 +78,13 @@ fun CashOutFormScreen(
 
     var description by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
-    var outcomeType by remember { mutableStateOf<OutcomeType>(OutcomeType.Income) } // Default value
+    var sourceOutcomeType by remember { mutableStateOf<SourceOutcomeType>(SourceOutcomeType.Income) } // Default value
 
     val imagePickerSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showImagePickerBottomSheet by remember { mutableStateOf(false) }
 
-    val outcomeTypeSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var showOutcomeTypeSheet by remember { mutableStateOf(false) }
+    val sourceOutcomeTypeSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var showSourceOutcomeTypeSheet by remember { mutableStateOf(false) }
 
     val coroutineScope = rememberCoroutineScope()
 
@@ -98,10 +98,10 @@ fun CashOutFormScreen(
         cashOut?.let {
             description = it.note
             amount = it.amount.toString()
-            outcomeType = when (it.outcomeType) {
-                OutcomeType.Income.title -> OutcomeType.Income
-                OutcomeType.Modal.title -> OutcomeType.Modal
-                else -> OutcomeType.Income
+            sourceOutcomeType = when (it.sourceOutcomeType) {
+                SourceOutcomeType.Income.title -> SourceOutcomeType.Income
+                SourceOutcomeType.Modal.title -> SourceOutcomeType.Modal
+                else -> SourceOutcomeType.Income
             }
             it.proof?.let { uriString -> imageUri = Uri.parse(uriString) }
         }
@@ -125,7 +125,7 @@ fun CashOutFormScreen(
                         paidFrom = loggedInUserName,
                         description = description,
                         amount = amount,
-                        outcomeType = outcomeType.title,
+                        sourceOutcomeType = sourceOutcomeType.title,
                         proofImageUrl = imageUri?.toString()
                     )
                     onSaveCashOut(formState)
@@ -162,10 +162,10 @@ fun CashOutFormScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             NutaTestReadOnlyTextField(
-                label = stringResource(R.string.label_outcome_type),
-                value = outcomeType.title,
-                placeholder = stringResource(id = R.string.hint_select_outcome_type),
-                onClick = { showOutcomeTypeSheet = true }
+                label = stringResource(R.string.label_source_outcome_type),
+                value = sourceOutcomeType.title,
+                placeholder = stringResource(id = R.string.hint_select_source_outcome_type),
+                onClick = { showSourceOutcomeTypeSheet = true }
             )
             Spacer(modifier = Modifier.height(24.dp))
             Text(
@@ -211,18 +211,18 @@ fun CashOutFormScreen(
         )
     }
 
-    if (showOutcomeTypeSheet) {
-        OutcomeTypeSelectionBottomSheet(
-            sheetState = outcomeTypeSheetState,
-            onDismiss = { showOutcomeTypeSheet = false },
+    if (showSourceOutcomeTypeSheet) {
+        SourceOutcomeTypeSelectionBottomSheet(
+            sheetState = sourceOutcomeTypeSheetState,
+            onDismiss = { showSourceOutcomeTypeSheet = false },
             onSelected = {
-                outcomeType = it
+                sourceOutcomeType = it
                 coroutineScope.launch {
-                    outcomeTypeSheetState.hide()
-                    showOutcomeTypeSheet = false
+                    sourceOutcomeTypeSheetState.hide()
+                    showSourceOutcomeTypeSheet = false
                 }
             },
-            initialSelected = outcomeType
+            initialSelected = sourceOutcomeType
         )
     }
 }

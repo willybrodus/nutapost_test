@@ -53,8 +53,13 @@ class CashOutFormViewModel @Inject constructor(
 
   fun loadCashOut(cashOutId: Long) {
     viewModelScope.launch {
-      getCashOutByIdUseCase(cashOutId).collect {
-        _cashOut.value = it
+      val user = _loggedInUser.value
+      if (user != null) {
+        getCashOutByIdUseCase(cashOutId, user).collect {
+          _cashOut.value = it
+        }
+      } else {
+        _showToast.emit("Gagal: Pengguna tidak ditemukan")
       }
     }
   }

@@ -5,6 +5,7 @@ import com.nutapos.nutatest.core.domain.model.cash_out.CashOut
 import com.nutapos.nutatest.core.domain.model.cash_out.CashOutflowFormState
 import com.nutapos.nutatest.core.domain.model.cash_out.toDomainModel
 import com.nutapos.nutatest.core.domain.model.cash_out.toEntity
+import com.nutapos.nutatest.core.domain.model.user.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -20,6 +21,6 @@ class UpdateCashOutUseCase @Inject constructor(private val repository: CashOutRe
 }
 
 class GetCashOutByIdUseCase @Inject constructor(private val repository: CashOutRepository) {
-    operator fun invoke(id: Long): Flow<CashOut?> = 
-        repository.getCashOutById(id).map { it?.toDomainModel() }
+    operator fun invoke(id: Long, user: User): Flow<CashOut?> =
+        repository.getCashOutById(id).map { it?.toDomainModel(user) }
 }

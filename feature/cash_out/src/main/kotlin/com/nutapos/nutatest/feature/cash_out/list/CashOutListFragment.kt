@@ -46,7 +46,7 @@ class CashOutListFragment : Fragment() {
                                     cashOutFrom = item.paidBy,
                                     amount = item.amount,
                                     description = item.note,
-                                    outcomeType = item.outcomeType
+                                    sourceOutcomeType = item.sourceOutcomeType
                                   )
                                 }
                             )
