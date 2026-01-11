@@ -41,7 +41,7 @@ fun HomeScreen(
     onNavigateToCashOut: () -> Unit,
     onExitApp: () -> Unit
 ) {
-    NutaTestTheme(darkTheme = false) {
+    NutaTestTheme {
         val uiState by homeViewModel.uiState.collectAsState()
         var showCreateUserDialog by remember { mutableStateOf(false) }
         var showUserSelectionSheet by remember { mutableStateOf(false) }
@@ -117,7 +117,7 @@ private fun LoggedInContent(
     NutaTestBottomSheet(
         title = title,
         onDismissRequest = onExitApp
-    ) {
+    ) { 
         Column(modifier = Modifier.navigationBarsPadding()) {
             HomeMenuItem(text = stringResource(R.string.cash_in_title), onClick = onNavigateToCashIn)
             HorizontalDivider()
@@ -143,17 +143,9 @@ private fun LoggedOutContent(
                 .padding(16.dp)
                 .navigationBarsPadding()
         ) {
-            NutaTestCtaButton(
-                text = stringResource(R.string.action_select_user),
-                onClick = onSelectUser,
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            NutaTestCtaButton(
-                text = stringResource(R.string.action_create_user),
-                onClick = onCreateUser,
-                modifier = Modifier.fillMaxWidth()
-            )
+          HomeMenuItem(text = stringResource(R.string.action_select_user), onClick = onSelectUser)
+          HorizontalDivider()
+          HomeMenuItem(text = stringResource(R.string.action_create_user), onClick = onCreateUser)
         }
     }
 }
