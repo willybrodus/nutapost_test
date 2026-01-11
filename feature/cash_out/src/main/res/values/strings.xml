@@ -27,4 +27,5 @@
   <string name="title_add_cash_out">Tambah Uang Keluar</string>
   <string name="title_edit_cash_out">Ubah Uang Keluar</string>
   <string name="label_paid_from">Dibayarkan dari</string>
+  <string name="filter_by_date">Filter berdasarkan tanggal</string>
 </resources>

@@ -41,8 +41,15 @@ import com.nutapos.nutatest.feature.cash_out.R
 import com.nutapos.nutatest.feature.cash_out.list.components.CashOutListGroup
 import com.nutapos.nutatest.feature.cash_out.list.components.CashOutTransaction
 import com.nutapos.nutatest.feature.common_ui.bottomsheet.PeriodSelectionDialog
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-data class CashOutGroup(val date: String, val total: String, val transactions: List<CashOutTransaction>)
+data class CashOutGroup(
+    val date: String,
+    val total: String,
+    val transactions: List<CashOutTransaction>
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,6 +57,8 @@ fun CashOutListScreen(
     onNavigateBack: () -> Unit,
     onNavigateToCreate: () -> Unit,
     groups: List<CashOutGroup> = emptyList(),
+    dateRange: Pair<Date?, Date?>,
+    onDateRangeSelected: (Date, Date) -> Unit
 ) {
     var showPeriodDialog by remember { mutableStateOf(false) }
 
@@ -115,7 +124,12 @@ fun CashOutListScreen(
                         tint = GreenMain
                     )
                     Text(
-                        text = "16 Apr 2024 - 22 Apr 2024",
+                        text = if (dateRange.first != null && dateRange.second != null) {
+                            val dateFormat = SimpleDateFormat("d MMM yyyy", Locale.getDefault())
+                            "${dateFormat.format(dateRange.first!!)} - ${dateFormat.format(dateRange.second!!)}"
+                        } else {
+                            stringResource(id = R.string.filter_by_date)
+                        },
                         modifier = Modifier.padding(horizontal = 8.dp),
                         color = GreenMain
                     )
@@ -144,7 +158,8 @@ fun CashOutListScreen(
     if (showPeriodDialog) {
         PeriodSelectionDialog(
             onDismiss = { showPeriodDialog = false },
-            onApply = { _, _ ->
+            onApply = { startDate, endDate ->
+                onDateRangeSelected(Date(startDate), Date(endDate))
                 showPeriodDialog = false
             }
         )
@@ -160,7 +175,9 @@ fun CashOutListScreenEmptyPreview() {
             CashOutListScreen(
                 onNavigateBack = {},
                 onNavigateToCreate = {},
-                groups = emptyList()
+                groups = emptyList(),
+                dateRange = Pair(null, null),
+                onDateRangeSelected = { _, _ -> }
             )
         }
     }
@@ -186,7 +203,9 @@ fun CashOutListScreenWithDataPreview() {
             CashOutListScreen(
                 onNavigateBack = {},
                 onNavigateToCreate = {},
-                groups = dummyGroups
+                groups = dummyGroups,
+                dateRange = Pair(Date(), Date()),
+                onDateRangeSelected = { _, _ -> }
             )
         }
     }
