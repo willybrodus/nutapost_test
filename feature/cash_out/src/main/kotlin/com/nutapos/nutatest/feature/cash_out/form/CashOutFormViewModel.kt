@@ -40,6 +40,9 @@ class CashOutFormViewModel @Inject constructor(
   private val _showToast = MutableSharedFlow<String>()
   val showToast = _showToast.asSharedFlow()
 
+  private val _navigateBack = MutableSharedFlow<Unit>()
+  val navigateBack = _navigateBack.asSharedFlow()
+
   init {
     viewModelScope.launch {
       _loggedInUser.value = getLoggedInUserUseCase().first()?.let {
@@ -64,6 +67,7 @@ class CashOutFormViewModel @Inject constructor(
         if (user != null) {
           insertCashOutUseCase(formState, user.id)
           _showToast.emit("berhasil disimpan")
+          _navigateBack.emit(Unit)
         } else {
           _showToast.emit("Gagal: Pengguna tidak ditemukan")
         }
@@ -83,6 +87,7 @@ class CashOutFormViewModel @Inject constructor(
         if (user != null) {
           updateCashOutUseCase(formState, user.id)
           _showToast.emit("berhasil diupdate")
+          _navigateBack.emit(Unit)
         } else {
           _showToast.emit("Gagal: Pengguna tidak ditemukan")
         }

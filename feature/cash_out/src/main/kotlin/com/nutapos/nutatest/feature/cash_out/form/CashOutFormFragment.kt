@@ -66,12 +66,15 @@ class CashOutFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.showToast.collectLatest { message ->
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                if (!viewModel.isLoading.value) {
-                    findNavController().popBackStack()
-                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.navigateBack.collectLatest {
+                findNavController().popBackStack()
             }
         }
     }
